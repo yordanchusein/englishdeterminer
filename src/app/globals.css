@@ -1,26 +1,101 @@
 @import "tailwindcss";
+@import "lenis/dist/lenis.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+
+  --color-ink: #13294b;
+  --color-ink-soft: #3d5475;
+  --color-sky: #4fb3f6;
+  --color-sky-deep: #2a8fe0;
+  --color-sky-light: #dff2ff;
+  --color-cream: #fff9ee;
+  --color-sun: #ffc83d;
+  --color-pine: #1f5c45;
+  --color-meadow: #6cc070;
+  --color-snow: #ffffff;
+  --color-good: #1faa62;
+  --color-bad: #e5484d;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+@utility shadow-hard {
+  box-shadow: 6px 6px 0 0 var(--color-ink);
+}
+@utility shadow-hard-sm {
+  box-shadow: 3px 3px 0 0 var(--color-ink);
+}
+@utility shadow-hard-lg {
+  box-shadow: 10px 10px 0 0 var(--color-ink);
+}
+@utility text-outline {
+  -webkit-text-stroke: 2px var(--color-ink);
+  color: transparent;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+html {
+  background: var(--color-cream);
+}
+body {
+  background: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-sun);
+  color: var(--color-ink);
+}
+
+.sky-gradient {
+  background: linear-gradient(180deg, #58b9f7 0%, #9dd6fb 45%, #e3f4ff 80%, #fff6e3 100%);
+}
+
+.hl {
+  display: inline-block;
+  padding: 0.08em 0.38em 0.12em;
+  margin: 0 0.06em;
+  border-radius: 0.4em;
+  color: #fff;
+  font-weight: 800;
+  line-height: 1.15;
+}
+
+.blank {
+  display: inline-block;
+  min-width: 3.2em;
+  border-bottom: 0.12em solid currentColor;
+  margin: 0 0.15em;
+  text-align: center;
+  line-height: 1.1;
+}
+
+@keyframes wave {
+  to {
+    transform: translateX(-50%);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Recap deck starts as a messy pile, then Flip spreads it out */
+.deck.is-stacked .rc {
+  position: absolute;
+  left: 50%;
+  top: 6vh;
+  transform: translateX(-50%) rotate(var(--r));
+}
+
+/* SplitText helpers */
+.split-line {
+  overflow: hidden;
+  padding-bottom: 0.08em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+  }
 }

@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Determiners — Small Words, Big Job
 
-## Getting Started
+An interactive English grammar presentation about **determiners**, built for a class presentation on one screen. Mountain-themed, animation-heavy (GSAP), with a 20-question class challenge.
 
-First, run the development server:
+## What's inside
+
+- **Preloader** — clouds part while a hiker climbs to the summit.
+- **Lesson** — "What is a determiner?", then a pinned horizontal trail through 7 types (articles, demonstratives, possessives, quantifiers, numbers, distributives, interrogatives), each with a live animated demo, rules, examples and a common mistake.
+- **Recap** — flip cards summarising every type.
+- **Summit Challenge** — 20 high-school level questions in 3 levels (multiple choice, drag & drop, spot the error, multi-gap), with timer, combo streaks, confetti, explanations and a results screen.
+
+## Presenter controls
+
+| Key | Action |
+| --- | --- |
+| `→` / `Space` / `←` | Next / previous section |
+| `Enter` | Start the quiz / next question |
+| `A–D` or `1–4` | Answer (drag & drop: place chip) |
+| `Backspace` | Clear last gap (drag & drop) |
+| `P` | Pause timer |
+| `Esc` | Leave the quiz (progress kept) |
+| `F` / `M` | Fullscreen / sound |
+
+## Running
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+For the actual presentation use the production build — it is much smoother and works offline (fonts and libraries are bundled):
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build
+npm run start
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Stack
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Next.js · Tailwind CSS · GSAP (ScrollTrigger, SplitText, Flip, Draggable, ScrambleText, Physics2D) · Lenis
