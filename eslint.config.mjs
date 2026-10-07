@@ -8,7 +8,7 @@ const eslintConfig = defineConfig([
   {
     // GSAP's contextSafe(fn) wraps event handlers during render; the React
     // Compiler rule wrongly assumes those handlers read refs while rendering.
-    files: ["src/components/Recap.tsx", "src/components/quiz/QuestionCard.tsx", "src/components/quiz/Quiz.tsx"],
+    files: ["src/components/Recap.tsx", "src/components/quiz/QuestionCard.tsx", "src/components/quiz/Quiz.tsx", "src/components/spldv/**/*.tsx"],
     rules: { "react-hooks/refs": "off" },
   },
   // Override default ignores of eslint-config-next.

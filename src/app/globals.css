@@ -17,6 +17,22 @@
   --color-snow: #ffffff;
   --color-good: #1faa62;
   --color-bad: #e5484d;
+
+  /* /spldv — fairy-tale palette */
+  --font-tale: var(--font-fraunces), ui-serif, Georgia, serif;
+  --font-round: var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
+  --color-night: #0b231d;
+  --color-plum: #17402f;
+  --color-violet: #6a4bc4;
+  --color-gold: #f7c548;
+  --color-gold-deep: #d99a1e;
+  --color-rose: #ff7eb3;
+  --color-parch: #fbf1dc;
+  --color-parch-deep: #efdcb4;
+  --color-quill: #22301e;
+  --color-quill-soft: #56684a;
+  --color-vx: #e8478f;
+  --color-vy: #129e94;
 }
 
 @utility shadow-hard {
@@ -27,6 +43,15 @@
 }
 @utility shadow-hard-lg {
   box-shadow: 10px 10px 0 0 var(--color-ink);
+}
+@utility shadow-tale {
+  box-shadow: 6px 6px 0 0 var(--color-quill);
+}
+@utility shadow-tale-sm {
+  box-shadow: 3px 3px 0 0 var(--color-quill);
+}
+@utility shadow-tale-lg {
+  box-shadow: 10px 10px 0 0 var(--color-quill);
 }
 @utility text-outline {
   -webkit-text-stroke: 2px var(--color-ink);
@@ -90,6 +115,109 @@ body {
 .split-line {
   overflow: hidden;
   padding-bottom: 0.08em;
+}
+
+/* ─── /spldv ───────────────────────────────────────────── */
+/* the fonts are loaded by the /spldv layout, so re-resolve the theme
+   font tokens where those variables actually exist */
+.spldv-fonts {
+  --font-tale: var(--font-fraunces), ui-serif, Georgia, serif;
+  --font-round: var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
+}
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: scale(0.7);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+.tale-night {
+  background: linear-gradient(180deg, #071c17 0%, #103529 38%, #215a40 66%, #5f9457 88%, #e6d48f 100%);
+}
+.tale-parch {
+  background-color: var(--color-parch);
+  background-image:
+    radial-gradient(circle at 15% 20%, rgba(217, 154, 30, 0.08) 0 18%, transparent 40%),
+    radial-gradient(circle at 85% 75%, rgba(106, 75, 196, 0.07) 0 20%, transparent 45%),
+    repeating-linear-gradient(0deg, rgba(43, 29, 79, 0.025) 0 2px, transparent 2px 28px);
+}
+.vx {
+  color: var(--color-vx);
+  font-weight: 800;
+  font-style: italic;
+}
+.vy {
+  color: var(--color-vy);
+  font-weight: 800;
+  font-style: italic;
+}
+.eq-hl {
+  background: rgba(247, 197, 72, 0.55);
+  border-radius: 0.3em;
+  padding: 0 0.15em;
+  box-decoration-break: clone;
+}
+.eq-cancel {
+  position: relative;
+  display: inline-block;
+}
+.eq-strike {
+  position: absolute;
+  left: -8%;
+  right: -8%;
+  top: 52%;
+  height: 0.12em;
+  border-radius: 99px;
+  background: var(--color-bad);
+  transform: rotate(-14deg) scaleX(0);
+  transform-origin: left center;
+}
+.tale-range {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 14px;
+  border-radius: 99px;
+  border: 3px solid var(--color-quill);
+  background: #fff;
+  outline: none;
+}
+.tale-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 3px solid var(--color-quill);
+  background: var(--thumb, var(--color-gold));
+  box-shadow: 2px 2px 0 var(--color-quill);
+  cursor: grab;
+}
+.tale-range::-moz-range-thumb {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 3px solid var(--color-quill);
+  background: var(--thumb, var(--color-gold));
+  cursor: grab;
+}
+.tale-range:focus-visible {
+  box-shadow: 0 0 0 4px rgba(247, 197, 72, 0.6);
+}
+.flip-3d {
+  perspective: 1200px;
+}
+.flip-inner {
+  transform-style: preserve-3d;
+}
+.flip-face {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.flip-back {
+  transform: rotateY(180deg);
 }
 
 @media (prefers-reduced-motion: reduce) {

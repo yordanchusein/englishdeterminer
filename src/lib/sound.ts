@@ -108,6 +108,10 @@ export const sfx = {
       tone(f, { type: "triangle", start: 0.25 + i * 0.12, dur: 0.3, vol: 0.16 }),
     );
   },
+  sparkle: () => {
+    [1318.5, 1567.98, 2093].forEach((f, i) => tone(f, { type: "sine", start: i * 0.05, dur: 0.22, vol: 0.07 }));
+  },
+  page: () => noise({ dur: 0.3, vol: 0.07, from: 1800, to: 5000 }),
   fanfare: () => {
     [523.25, 659.25, 783.99, 1046.5].forEach((f, i) =>
       tone(f, { type: "triangle", start: i * 0.13, dur: 0.25, vol: 0.2 }),
