@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { GreatTree, Hills, Moon, Pine, Sparkle, Stars, TreeLine } from "./Scenery";
+import Icon from "./Icons";
 
 export default function ForestGate({ onStart }: { onStart: () => void }) {
   const root = useRef<HTMLElement>(null);
@@ -36,7 +37,7 @@ export default function ForestGate({ onStart }: { onStart: () => void }) {
           className="relative mt-8 rounded-full border-[4px] border-quill bg-gold px-10 py-4 font-tale text-[clamp(1.3rem,2vw,2rem)] font-black text-quill shadow-[6px_6px_0_#06140f] transition-transform hover:-translate-y-1 hover:rotate-[-1deg] active:translate-y-0.5"
         >
           <span className="cg-btn-glow pointer-events-none absolute inset-0 rounded-full border-[4px] border-gold" />
-          🌳 Masuki Hutan
+          <Icon name="tree" className="mr-2 h-9 w-9 align-[-0.3em]" />Masuki Hutan
         </button>
         <p className="mt-3 font-round text-sm font-bold text-parch/60">atau tekan Enter</p>
       </div>

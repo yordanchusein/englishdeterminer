@@ -7,6 +7,7 @@ import { sfx } from "@/lib/sound";
 import { returnRules, strategy } from "@/data/spldv";
 import { ChapterTitle, Section } from "./Chapter";
 import { FairyX, GreatTree } from "./Scenery";
+import Icon from "./Icons";
 
 // stepping stones along a gentle wave (percent of the track)
 const STONES = [
@@ -101,7 +102,7 @@ export default function Strategy() {
                   i <= step ? "bg-gold shadow-[0_0_30px_rgba(247,197,72,0.8),4px_4px_0_#22301e]" : "bg-[#d8cbb4] shadow-tale-sm hover:bg-[#e8dcc6]"
                 }`}
               >
-                {s.icon}
+                <Icon name={s.icon} className="h-[60%] w-[60%]" />
               </span>
               <span className="max-w-full rounded-2xl border-2 border-quill bg-white px-3 py-1 text-center font-round text-[clamp(0.75rem,0.85vw,0.9rem)] font-black leading-snug">
                 {i + 1}. {s.word}
@@ -121,16 +122,17 @@ export default function Strategy() {
               <>
                 <p className="font-round text-xs font-black uppercase tracking-[0.3em] text-quill-soft">Langkah {step + 1} dari 5</p>
                 <p className="mt-1 font-tale text-[clamp(1.8rem,3vw,3rem)] font-black leading-tight">
-                  {cur.icon} {cur.word}
+                  <Icon name={cur.icon} className="mr-2 h-[1.1em] w-[1.1em] align-[-0.15em]" />
+                  {cur.word}
                 </p>
                 <p className="mt-1 font-tale text-[clamp(1.1rem,1.5vw,1.6rem)] font-semibold">{cur.hint}</p>
                 {last && (
                   <div className="mt-4 rounded-2xl border-[3px] border-bad bg-bad/10 p-4">
-                    <p className="font-tale text-lg font-black text-bad">⚠️ Ini penting! Jangan berhenti setelah menemukan x dan y.</p>
+                    <p className="font-tale text-lg font-black text-bad"><Icon name="warning" className="mr-2 h-7 w-7" />Ini penting! Jangan berhenti setelah menemukan x dan y.</p>
                     <div className="mt-3 grid gap-3 sm:grid-cols-3">
                       {returnRules.map((r) => (
                         <div key={r.ask} className="rounded-xl border-2 border-quill bg-white p-3">
-                          <div className="text-2xl">{r.icon}</div>
+                          <Icon name={r.icon} className="h-9 w-9" />
                           <p className="font-round text-sm font-bold text-quill-soft">Kalau {r.ask.toLowerCase()},</p>
                           <p className="font-tale text-lg font-black">{r.then}.</p>
                         </div>

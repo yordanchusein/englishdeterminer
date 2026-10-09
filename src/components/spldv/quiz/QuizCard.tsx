@@ -6,6 +6,7 @@ import { burstFrom } from "@/lib/confetti";
 import { sfx } from "@/lib/sound";
 import { quizLevels, type QuizQ } from "@/data/spldv";
 import Eq from "../Eq";
+import Icon from "../Icons";
 
 export type Record_ = { correct: boolean; given: number | null };
 
@@ -133,7 +134,8 @@ export default function QuizCard({ q, index, total, record, onAnswer, onNext }: 
             />
           </div>
           <span className={`w-16 text-right font-round text-xl font-black tabular-nums ${left <= 10 && !answered ? "animate-pulse text-bad" : ""}`}>
-            ⏳ {left}
+            <Icon name="hourglass" className="mr-1 h-6 w-6" />
+            {left}
           </span>
           {paused && !answered && (
             <span className="rounded-full bg-quill px-3 py-0.5 font-round text-xs font-black text-white">JEDA</span>
@@ -196,7 +198,7 @@ export default function QuizCard({ q, index, total, record, onAnswer, onNext }: 
               record.correct ? "bg-good/15" : "bg-bad/10"
             }`}
           >
-            <span className="text-4xl">{record.correct ? "🌟" : record.given === null ? "⌛" : "🐉"}</span>
+            <Icon name={record.correct ? "star" : record.given === null ? "hourglass" : "dragon"} className="h-12 w-12" />
             <div className="min-w-0 flex-1">
               <p className="font-tale text-xl font-black">
                 {record.correct ? "Mantra berhasil!" : record.given === null ? "Waktu habis!" : "Ups, sang naga menghadang!"}
@@ -207,7 +209,13 @@ export default function QuizCard({ q, index, total, record, onAnswer, onNext }: 
               onClick={onNext}
               className="rounded-2xl border-[3px] border-quill bg-violet px-5 py-2.5 font-tale text-lg font-black text-white shadow-tale-sm transition-transform hover:-translate-y-0.5"
             >
-              {index === total - 1 ? "Lihat hasil 🏆" : "Lanjut →"}
+              {index === total - 1 ? (
+                <>
+                  Lihat hasil <Icon name="trophy" className="ml-1 h-6 w-6" />
+                </>
+              ) : (
+                "Lanjut →"
+              )}
             </button>
           </div>
         )}

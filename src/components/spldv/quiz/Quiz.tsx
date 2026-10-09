@@ -8,6 +8,7 @@ import { quizLevels, quizQuestions as questions } from "@/data/spldv";
 import Eq from "../Eq";
 import { GreatTree, Hills, Sparkle, Stars, TreeLine } from "../Scenery";
 import QuizCard, { type Record_ } from "./QuizCard";
+import Icon from "../Icons";
 
 type Phase = "level" | "question" | "result";
 const empty = () => questions.map(() => null as Record_ | null);
@@ -38,7 +39,7 @@ function LevelIntro({ level, onDone }: { level: 1 | 2 | 3; onDone: () => void })
   );
   return (
     <div ref={root} className="absolute inset-0 z-20 flex cursor-pointer flex-col items-center justify-center text-center text-parch" onClick={onDone}>
-      <div className="li-icon text-[clamp(4rem,9vw,8rem)]">{lv.icon}</div>
+      <Icon name={lv.icon} className="li-icon h-[clamp(5rem,10vw,9rem)] w-[clamp(5rem,10vw,9rem)]" />
       <p className="li-kicker mt-2 font-round text-sm font-black uppercase tracking-[0.4em] text-gold">
         Level {level} · {lv.sub}
       </p>
@@ -150,18 +151,19 @@ function Result({
             Gelar: {gr.t}
           </p>
           <div className="mt-4 flex justify-center gap-3 font-round font-black">
-            <span className="rounded-2xl border-[3px] border-quill bg-white px-4 py-1.5">✅ {score} benar</span>
-            <span className="rounded-2xl border-[3px] border-quill bg-white px-4 py-1.5">🔥 combo terbaik {bestStreak}</span>
+            <span className="rounded-2xl border-[3px] border-quill bg-white px-4 py-1.5"><Icon name="check" className="mr-1 h-6 w-6" />{score} benar</span>
+            <span className="rounded-2xl border-[3px] border-quill bg-white px-4 py-1.5"><Icon name="flame" className="mr-1 h-6 w-6" />combo terbaik {bestStreak}</span>
           </div>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
             <button onClick={() => { sfx.click(); setReview((r) => !r); }} className="rs-btn rounded-2xl border-[3px] border-quill bg-white px-5 py-2.5 font-tale font-black shadow-tale-sm">
-              📜 {review ? "Tutup pembahasan" : "Lihat pembahasan"}
+              <Icon name="scroll" className="mr-1 h-6 w-6" />
+              {review ? "Tutup pembahasan" : "Lihat pembahasan"}
             </button>
             <button onClick={onRestart} className="rs-btn rounded-2xl border-[3px] border-quill bg-gold px-5 py-2.5 font-tale font-black shadow-tale-sm">
               ↺ Ulangi ujian
             </button>
             <button onClick={onClose} className="rs-btn rounded-2xl border-[3px] border-quill bg-violet px-5 py-2.5 font-tale font-black text-white shadow-tale-sm">
-              🌳 Kembali ke hutan
+              <Icon name="tree" className="mr-1 h-6 w-6" />Kembali ke hutan
             </button>
           </div>
         </div>
@@ -173,7 +175,8 @@ function Result({
               return (
                 <div key={i} className={`rounded-2xl border-[3px] border-quill p-4 ${r?.correct ? "bg-[#e7f7ee]" : "bg-[#fde8e8]"}`}>
                   <p className="font-round text-xs font-black uppercase tracking-[0.2em] text-quill-soft">
-                    Soal {i + 1} · {r?.correct ? "✅ benar" : r?.given == null ? "⌛ tidak dijawab" : "❌ salah"}
+                    Soal {i + 1} · <Icon name={r?.correct ? "check" : r?.given == null ? "hourglass" : "cross"} className="mx-1 h-4 w-4" />
+                    {r?.correct ? "benar" : r?.given == null ? "tidak dijawab" : "salah"}
                   </p>
                   <p className="mt-1 font-tale font-bold text-quill">{q.prompt}</p>
                   {q.system && <p className="text-quill">{q.system.map((s) => <Eq key={s} text={s} className="mr-4" />)}</p>}
@@ -226,7 +229,7 @@ export default function Quiz({ open, onClose }: { open: boolean; onClose: () => 
     gsap.fromTo(".qz-score", { scale: 1 }, { scale: r.correct ? 1.4 : 0.8, duration: 0.2, yoyo: true, repeat: 1 });
     if (r.correct && s >= 2) {
       const el = root.current!.querySelector(".qz-combo")!;
-      el.textContent = `${s}× COMBO!${s >= 4 ? " 🔥" : " ✨"}`;
+      el.textContent = `${s}× COMBO!`;
       setTimeout(() => sfx.combo(), 250);
       gsap
         .timeline()
@@ -294,7 +297,7 @@ export default function Quiz({ open, onClose }: { open: boolean; onClose: () => 
               className="rounded-2xl border-[3px] border-quill px-4 py-1.5 font-tale text-lg font-black text-white shadow-[3px_3px_0_#06140f]"
               style={{ background: lv.color }}
             >
-              {lv.icon} {lv.name}
+              <Icon name={lv.icon} className="mr-1 h-7 w-7" /> {lv.name}
             </span>
             <div className="flex flex-1 items-center gap-3">
               <div className="h-3 flex-1 overflow-hidden rounded-full border-2 border-quill bg-white/90">
@@ -305,14 +308,16 @@ export default function Quiz({ open, onClose }: { open: boolean; onClose: () => 
               </div>
             </div>
             <span className="qz-score rounded-2xl border-[3px] border-quill bg-gold px-4 py-1.5 font-round text-lg font-black text-quill shadow-[3px_3px_0_#06140f]">
-              ⭐ {score}
+              <Icon name="star" className="mr-1 h-6 w-6" />
+              {score}
             </span>
             <span
               className={`rounded-2xl border-[3px] border-quill px-4 py-1.5 font-round text-lg font-black shadow-[3px_3px_0_#06140f] transition-colors ${
                 streak >= 2 ? "bg-rose text-white" : "bg-white text-quill"
               }`}
             >
-              🔥 {streak}
+              <Icon name="flame" className="mr-1 h-6 w-6" />
+              {streak}
             </span>
             <button
               onClick={close}

@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 import { Sparkle, Stars } from "./Scenery";
+import Icon from "./Icons";
 
 const CAPTIONS = [
   "Meniup debu dari buku tua…",
@@ -162,7 +163,7 @@ export default function BookLoader({ onReveal, onFinish }: { onReveal: () => voi
           <div className="bl-cover flip-inner absolute inset-0 left-1/2 z-20 origin-left">
             <div className="flip-face absolute inset-0 flex flex-col items-center justify-center rounded-r-lg border-[3px] border-quill bg-[linear-gradient(135deg,#2f744b,#17402f)] text-gold shadow-[6px_6px_0_#06140f]">
               <div className="absolute inset-2 rounded-md border-2 border-dashed border-gold/60" />
-              <span className="text-[clamp(1.6rem,2.6vw,2.6rem)]">🌳</span>
+              <Icon name="tree" className="h-[clamp(2rem,3vw,3rem)] w-[clamp(2rem,3vw,3rem)]" />
               <span className="mt-1 font-tale text-[clamp(0.9rem,1.4vw,1.4rem)] font-black">Kisah Dua</span>
               <span className="font-tale text-[clamp(0.9rem,1.4vw,1.4rem)] font-black">Variabel</span>
             </div>

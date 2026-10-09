@@ -5,6 +5,7 @@ import { sfx } from "@/lib/sound";
 import { ChapterTitle, Section } from "./Chapter";
 import Eq from "./Eq";
 import { DragonY, FairyX, Mushroom } from "./Scenery";
+import Icon from "./Icons";
 
 type Coef = "a" | "b" | "c" | "p" | "q" | "r";
 
@@ -90,7 +91,7 @@ export default function Intro() {
         <div className="space-y-6">
           <p className="rv max-w-[60ch] font-tale text-[clamp(1.1rem,1.5vw,1.55rem)] leading-relaxed text-quill">
             Jauh di dalam Hutan Dua Variabel hiduplah dua makhluk ajaib yang suka bersembunyi:{" "}
-            <b className="vx not-italic">Peri x</b> dan <b className="vy not-italic">Naga y</b>. Burung Hantu Bijak 🦉 memberi kita{" "}
+            <b className="vx not-italic">Peri x</b> dan <b className="vy not-italic">Naga y</b>. Burung Hantu Bijak <Icon name="owl" className="h-[1.4em] w-[1.4em] align-[-0.3em]" /> memberi kita{" "}
             <b>dua petunjuk</b>. Hanya dengan memakai <i>keduanya</i>, kita bisa menemukan mereka.
           </p>
 
@@ -132,7 +133,7 @@ export default function Intro() {
         <div className="rv">
           <div className="relative rounded-[2rem] border-[3px] border-quill bg-[linear-gradient(160deg,#fff,#eef7e4)] p-[clamp(1.2rem,2.4vw,2.4rem)] shadow-tale-lg">
             <span className="absolute -top-5 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border-[3px] border-quill bg-rose px-5 py-1 font-tale text-lg font-black text-white shadow-tale-sm">
-              📜 Bentuk Umum
+              <Icon name="scroll" className="mr-1 h-6 w-6" />Bentuk Umum
             </span>
             <div className="mt-3 space-y-1 text-center">
               {GENERAL.map((row, i) => (
@@ -162,7 +163,14 @@ export default function Intro() {
                 color: active ? COEF_COLOR[active] : "#56684a",
               }}
             >
-              {active ? COEF_HINT[active] : "✨ Arahkan tongkat (kursor) ke huruf atau angka bergaris putus-putus"}
+              {active ? (
+                COEF_HINT[active]
+              ) : (
+                <>
+                  <Icon name="wand" className="mr-1 h-6 w-6" />
+                  Arahkan tongkat (kursor) ke huruf atau angka bergaris putus-putus
+                </>
+              )}
             </p>
           </div>
         </div>

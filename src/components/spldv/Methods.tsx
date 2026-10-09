@@ -7,6 +7,7 @@ import { methods } from "@/data/spldv";
 import { ChapterTitle, Section } from "./Chapter";
 import StepPlayer from "./StepPlayer";
 import { Stars } from "./Scenery";
+import Icon from "./Icons";
 
 export default function Methods() {
   const root = useRef<HTMLDivElement>(null);
@@ -49,7 +50,7 @@ export default function Methods() {
               }}
             >
               <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border-[3px] border-quill bg-parch text-3xl transition-transform group-hover:rotate-12">
-                {mm.icon}
+                <Icon name={mm.icon} className="h-10 w-10" />
               </span>
               <span>
                 <span className="block font-round text-xs font-black uppercase tracking-[0.25em] opacity-75">
@@ -78,7 +79,7 @@ export default function Methods() {
               className="absolute -top-5 right-6 rounded-full border-[3px] border-quill px-4 py-1 font-tale text-lg font-black text-white shadow-tale-sm"
               style={{ background: m.color }}
             >
-              {m.icon} {m.name}
+              <Icon name={m.icon} className="mr-1 h-6 w-6" /> {m.name}
             </span>
             <StepPlayer steps={m.steps} color={m.color} size="lg" final="x = 22 dan y = 15" />
           </div>

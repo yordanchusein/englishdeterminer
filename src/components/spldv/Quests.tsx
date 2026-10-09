@@ -9,6 +9,7 @@ import { quests, type Quest } from "@/data/spldv";
 import { ChapterTitle, Section } from "./Chapter";
 import StepPlayer from "./StepPlayer";
 import { Pine, Sparkle } from "./Scenery";
+import Icon from "./Icons";
 
 const parse = (s: string) => Number(s.replace(/rp|m²|m2|tahun|\s|\./gi, "").replace(",", "."));
 
@@ -100,7 +101,7 @@ function QuestModal({ q, num, onClose, onSolved }: { q: Quest; num: number; onCl
               className="flex h-14 w-14 items-center justify-center rounded-2xl border-[3px] border-quill text-3xl shadow-tale-sm"
               style={{ background: q.color }}
             >
-              {q.icon}
+              <Icon name={q.icon} className="h-10 w-10" />
             </span>
             <div>
               <p className="font-round text-xs font-black uppercase tracking-[0.25em] text-quill-soft">
@@ -115,7 +116,7 @@ function QuestModal({ q, num, onClose, onSolved }: { q: Quest; num: number; onCl
           </p>
 
           <div className="qm-in mt-4 flex flex-wrap gap-2">
-            <span className="font-round text-sm font-black text-quill-soft">🏷️ Misalkan:</span>
+            <span className="font-round text-sm font-black text-quill-soft"><Icon name="tag" className="mr-1 h-5 w-5" />Misalkan:</span>
             {q.let.map((l, i) => (
               <span
                 key={l}
@@ -134,7 +135,7 @@ function QuestModal({ q, num, onClose, onSolved }: { q: Quest; num: number; onCl
               check();
             }}
           >
-            <p className="font-round text-sm font-black uppercase tracking-[0.2em] text-quill-soft">✍️ Jawabanmu</p>
+            <p className="font-round text-sm font-black uppercase tracking-[0.2em] text-quill-soft"><Icon name="quill" className="mr-1 h-5 w-5" />Jawabanmu</p>
             {q.fields.map((f, i) => {
               const state = checked ? (checked[i] ? "ok" : "bad") : null;
               return (
@@ -155,7 +156,7 @@ function QuestModal({ q, num, onClose, onSolved }: { q: Quest; num: number; onCl
                       placeholder="?"
                     />
                     {f.unit && f.unit !== "Rp" && <span className="font-round font-black">{f.unit}</span>}
-                    {state && <span className="text-2xl">{state === "ok" ? "✅" : "❌"}</span>}
+                    {state && <Icon name={state === "ok" ? "check" : "cross"} className="h-8 w-8" />}
                   </span>
                 </label>
               );
@@ -165,7 +166,7 @@ function QuestModal({ q, num, onClose, onSolved }: { q: Quest; num: number; onCl
                 type="submit"
                 className="qm-check rounded-2xl border-[3px] border-quill bg-gold px-5 py-2.5 font-tale text-lg font-black shadow-tale-sm transition-transform hover:-translate-y-0.5"
               >
-                🔮 Cek jawaban
+                <Icon name="crystal" className="mr-1 h-6 w-6" />Cek jawaban
               </button>
               {!open && (
                 <button
@@ -173,7 +174,7 @@ function QuestModal({ q, num, onClose, onSolved }: { q: Quest; num: number; onCl
                   onClick={reveal}
                   className="rounded-2xl border-[3px] border-quill bg-white px-4 py-2.5 font-tale font-black shadow-tale-sm transition-transform hover:-translate-y-0.5"
                 >
-                  📜 Buka gulungan penyelesaian
+                  <Icon name="scroll" className="mr-1 h-6 w-6" />Buka gulungan penyelesaian
                 </button>
               )}
             </div>
@@ -182,7 +183,7 @@ function QuestModal({ q, num, onClose, onSolved }: { q: Quest; num: number; onCl
             )}
             {allRight && (
               <p className="flex items-center gap-2 font-tale text-xl font-black text-good">
-                <span className="qm-badge inline-block rounded-full border-[3px] border-quill bg-gold px-3 py-0.5 text-quill">⭐ +1</span>
+                <span className="qm-badge inline-block rounded-full border-[3px] border-quill bg-gold px-3 py-0.5 text-quill"><Icon name="star" className="mr-1 h-5 w-5" />+1</span>
                 Misi selesai! Bintang didapat.
               </p>
             )}
@@ -191,7 +192,7 @@ function QuestModal({ q, num, onClose, onSolved }: { q: Quest; num: number; onCl
 
         {/* right page: the solution scroll */}
         <div className="relative flex h-[520px] max-h-[75dvh] min-h-[340px] flex-col bg-[#f6e8c8] p-[clamp(1.2rem,2.4vw,2.6rem)] lg:pt-16">
-          <p className="qm-in mb-3 font-round text-sm font-black uppercase tracking-[0.2em] text-quill-soft">📜 Penyelesaian</p>
+          <p className="qm-in mb-3 font-round text-sm font-black uppercase tracking-[0.2em] text-quill-soft"><Icon name="scroll" className="mr-1 h-5 w-5" />Penyelesaian</p>
           {open ? (
             <div className="min-h-0 flex-1">
               <StepPlayer steps={q.steps} vars={q.vars} final={q.final} color={q.color} />
@@ -201,7 +202,7 @@ function QuestModal({ q, num, onClose, onSolved }: { q: Quest; num: number; onCl
               onClick={reveal}
               className="qm-in group flex flex-1 flex-col items-center justify-center gap-3 rounded-3xl border-[3px] border-dashed border-quill/40 text-quill-soft transition-colors hover:bg-white/50"
             >
-              <span className="text-6xl transition-transform group-hover:rotate-12 group-hover:scale-110">📜</span>
+              <Icon name="scroll" className="h-20 w-20 transition-transform group-hover:rotate-12 group-hover:scale-110" />
               <span className="font-tale text-xl font-black">Gulungan masih tersegel</span>
               <span className="font-round text-sm font-bold">Coba kerjakan dulu, lalu ketuk untuk membuka</span>
             </button>
@@ -333,7 +334,7 @@ export default function Quests({ onModal }: { onModal: (open: boolean) => void }
                   className="qp-bob flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl border-[3px] border-quill text-4xl shadow-tale-sm transition-transform group-hover:rotate-[-8deg] group-hover:scale-110"
                   style={{ background: q.color }}
                 >
-                  {q.icon}
+                  <Icon name={q.icon} className="h-10 w-10" />
                 </span>
                 <span className="min-w-0">
                   <span className="block font-round text-[0.7rem] font-black uppercase tracking-[0.2em] text-quill-soft">
@@ -346,7 +347,7 @@ export default function Quests({ onModal }: { onModal: (open: boolean) => void }
                     solved[i] ? "scale-100 bg-gold" : "scale-90 bg-parch-deep grayscale"
                   }`}
                 >
-                  ⭐
+                  <Icon name="star" className="h-6 w-6" />
                 </span>
               </button>
             );

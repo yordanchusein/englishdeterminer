@@ -17,6 +17,7 @@ import Strategy from "./Strategy";
 import ForestGate from "./ForestGate";
 import Quiz from "./quiz/Quiz";
 import { POS_KEY, RESUME_KEY } from "./resume";
+import Icon from "./Icons";
 
 const CHAPTERS = [
   { id: "top", label: "Awal" },
@@ -25,7 +26,7 @@ const CHAPTERS = [
   { id: "mantra", label: "III" },
   { id: "misi", label: "IV" },
   { id: "strategi", label: "V" },
-  { id: "gerbang", label: "🌳" },
+  { id: "gerbang", label: "gate" },
 ];
 
 const Lesson = memo(function Lesson({ onStart, onModal }: { onStart: () => void; onModal: (o: boolean) => void }) {
@@ -206,7 +207,7 @@ export default function SpldvExperience() {
             onClick={() => jump("top")}
             className="pointer-events-auto flex items-center gap-2 rounded-full border-[3px] border-quill bg-parch/95 px-3 py-1 font-tale text-sm font-black shadow-tale-sm"
           >
-            🌳 SPLDV
+            <Icon name="tree" className="h-6 w-6" /> SPLDV
           </button>
           <nav className="pointer-events-auto hidden items-center gap-1.5 rounded-full border-[3px] border-quill bg-parch/90 px-2 py-1 shadow-tale-sm md:flex">
             {CHAPTERS.map((c, i) => (
@@ -215,7 +216,7 @@ export default function SpldvExperience() {
                 onClick={() => jump(c.id)}
                 className={`hud-dot-${i} min-w-8 rounded-full px-2 py-0.5 font-tale text-xs font-black transition-colors hover:bg-gold/60 [&.is-on]:bg-violet [&.is-on]:text-white`}
               >
-                {c.label}
+                {c.label === "gate" ? <Icon name="tree" className="h-4 w-4" /> : c.label}
               </button>
             ))}
           </nav>
@@ -228,14 +229,14 @@ export default function SpldvExperience() {
               title="Suara (M)"
               className="flex h-10 w-10 items-center justify-center rounded-full border-[3px] border-quill bg-parch/95 shadow-tale-sm"
             >
-              {muted ? "🔇" : "🔊"}
+              <Icon name={muted ? "soundOff" : "soundOn"} className="h-6 w-6" />
             </button>
             <button
               onClick={toggleFullscreen}
               title="Layar penuh (F)"
               className="flex h-10 w-10 items-center justify-center rounded-full border-[3px] border-quill bg-parch/95 font-black shadow-tale-sm"
             >
-              ⛶
+              <Icon name="fullscreen" className="h-5 w-5" />
             </button>
           </div>
         </div>

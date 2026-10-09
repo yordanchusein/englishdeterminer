@@ -7,6 +7,7 @@ import { sfx } from "@/lib/sound";
 import { translations } from "@/data/spldv";
 import { ChapterTitle, Section } from "./Chapter";
 import Eq from "./Eq";
+import Icon from "./Icons";
 
 /** three equation choices per card: the answer plus two neighbours, in a fixed shuffled order */
 const CHOICES = translations.map((t, i) => {
@@ -94,18 +95,21 @@ export default function Translator() {
               challenge ? "bg-rose text-white" : "bg-white"
             }`}
           >
-            {challenge ? "🎯 Mode Tantangan: AKTIF" : "🎯 Mode Tantangan"}
+            <Icon name="target" className="mr-1.5 h-6 w-6" />
+            {challenge ? "Mode Tantangan: AKTIF" : "Mode Tantangan"}
           </button>
           {!challenge && (
             <button
               onClick={all}
               className="rounded-2xl border-[3px] border-quill bg-violet px-4 py-2 font-tale font-black text-white shadow-tale-sm transition-transform hover:-translate-y-0.5"
             >
-              ✨ {flipped.every(Boolean) ? "Kembalikan semua" : "Terjemahkan semua"}
+              <Icon name="wand" className="mr-1.5 h-6 w-6" />
+              {flipped.every(Boolean) ? "Kembalikan semua" : "Terjemahkan semua"}
             </button>
           )}
           <span className="rounded-2xl border-[3px] border-quill bg-gold px-4 py-2 font-round font-black tabular-nums shadow-tale-sm">
-            ⭐ {score} / {translations.length}
+            <Icon name="star" className="mr-1.5 h-6 w-6" />
+            {score} / {translations.length}
           </span>
         </div>
 
@@ -124,7 +128,7 @@ export default function Translator() {
                   }`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-2xl">{t.icon}</span>
+                    <Icon name={t.icon} className="h-9 w-9" />
                     <span className="font-round text-xs font-black uppercase tracking-[0.2em] text-quill-soft">Cerita</span>
                   </div>
                   <p className={`mt-2 font-tale text-[clamp(1.05rem,1.3vw,1.35rem)] font-bold leading-snug ${challenge ? "" : "flex-1"}`}>“{t.story}”</p>
@@ -143,7 +147,7 @@ export default function Translator() {
                       ))}
                     </div>
                   ) : (
-                    <span className="mt-3 font-round text-xs font-extrabold text-violet">✨ ketuk untuk menerjemahkan</span>
+                    <span className="mt-3 font-round text-xs font-extrabold text-violet"><Icon name="pointer" className="mr-1 h-5 w-5" />ketuk untuk menerjemahkan</span>
                   )}
                 </div>
 
@@ -166,7 +170,7 @@ export default function Translator() {
         </div>
 
         <p className="rv mt-8 font-round text-sm font-bold text-quill-soft">
-          💡 Ingat: <b>jumlah</b> → tambah, <b>selisih</b> → kurang, <b>lebih banyak</b> → “x = y + …”, <b>kali</b> → koefisien.
+          <Icon name="bulb" className="mr-1 h-6 w-6" /> Ingat: <b>jumlah</b> → tambah, <b>selisih</b> → kurang, <b>lebih banyak</b> → “x = y + …”, <b>kali</b> → koefisien.
           Untuk roda, motor = 2 roda, mobil = 4 roda.
         </p>
       </div>

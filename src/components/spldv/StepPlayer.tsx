@@ -6,6 +6,7 @@ import { burstFrom } from "@/lib/confetti";
 import { sfx } from "@/lib/sound";
 import type { Step } from "@/data/spldv";
 import Eq from "./Eq";
+import Icon from "./Icons";
 
 type Props = {
   steps: Step[];
@@ -136,7 +137,8 @@ export default function StepPlayer({ steps, vars, final, color = "#6a4bc4", size
         ))}
         {done && final && (
           <li className="sp-final origin-left rounded-2xl border-[3px] border-quill bg-gold px-4 py-3 font-tale text-[clamp(1.05rem,1.4vw,1.5rem)] font-black shadow-tale-sm">
-            🏆 {final}
+            <Icon name="trophy" className="mr-2 h-8 w-8" />
+            {final}
           </li>
         )}
       </ol>
@@ -148,7 +150,7 @@ export default function StepPlayer({ steps, vars, final, color = "#6a4bc4", size
           className="rounded-2xl border-[3px] border-quill px-5 py-2.5 font-tale text-[clamp(0.95rem,1.1vw,1.15rem)] font-black text-white shadow-tale-sm transition-transform hover:-translate-y-0.5 active:translate-y-0.5 disabled:opacity-40"
           style={{ background: color }}
         >
-          ✨ Langkah berikutnya
+          <Icon name="sparkle" className="mr-1.5 h-5 w-5" />Langkah berikutnya
         </button>
         <button
           onClick={reset}

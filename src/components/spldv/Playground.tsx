@@ -6,6 +6,7 @@ import { burstFrom } from "@/lib/confetti";
 import { sfx } from "@/lib/sound";
 import { ChapterTitle, Section } from "./Chapter";
 import { DragonY, FairyX, Sparkle } from "./Scenery";
+import Icon from "./Icons";
 
 const MAX = 40;
 const PAD = 44;
@@ -183,7 +184,7 @@ export default function Playground() {
             </g>
           </svg>
           <p className="mt-3 text-center font-round text-sm font-bold text-parch/70">
-            ✋ Seret bintang di grafik, atau pakai penggeser di samping
+            <Icon name="pointer" className="mr-1 h-5 w-5" />Seret bintang di grafik, atau pakai penggeser di samping
           </p>
         </div>
 
@@ -235,7 +236,7 @@ export default function Playground() {
                   boxShadow: l.ok ? "0 0 40px 6px rgba(247,197,72,0.6), 6px 6px 0 #06140f" : "6px 6px 0 #06140f",
                 }}
               >
-                <div className="text-3xl">{l.ok ? "🏮" : "🕯️"}</div>
+                <Icon name={l.ok ? "lantern" : "candle"} className="mx-auto h-11 w-11" />
                 <div className="mt-1 font-round text-xs font-black uppercase tracking-[0.25em] opacity-70">Petunjuk {l.n}</div>
                 <div className="font-round text-xl font-black italic" style={{ color: l.ok ? "#22301e" : l.color }}>
                   {l.label}
@@ -255,13 +256,13 @@ export default function Playground() {
               }}
               className="rounded-2xl border-[3px] border-quill bg-white px-4 py-2 font-tale font-black text-quill shadow-[3px_3px_0_#06140f] transition-transform hover:-translate-y-0.5"
             >
-              🔮 Bisikkan petunjuk
+              <Icon name="crystal" className="mr-1 h-6 w-6" />Bisikkan petunjuk
             </button>
             <button
               onClick={showAnswer}
               className="rounded-2xl border-[3px] border-quill bg-rose px-4 py-2 font-tale font-black text-white shadow-[3px_3px_0_#06140f] transition-transform hover:-translate-y-0.5"
             >
-              ✨ Tunjukkan jawaban
+              <Icon name="wand" className="mr-1 h-6 w-6" />Tunjukkan jawaban
             </button>
           </div>
           {hint && (

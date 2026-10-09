@@ -4,21 +4,23 @@
  * Equation strings are rendered by <Eq>: variable letters get their colour,
  * {{…}} is highlighted and [[…]] is struck out when its step appears.
  */
+import type { IconName } from "@/components/spldv/Icons";
+
 
 export type Step =
   | { kind: "lines"; note?: string; lines: string[] }
   | { kind: "stack"; note?: string; top: string; bottom: string; op: "+" | "−"; result: string[] };
 
 /* ─── Bab II · Cerita → Persamaan ───────────────────────── */
-export const translations: { story: string; eq: string; icon: string }[] = [
-  { story: "jumlah x dan y adalah 30", eq: "x + y = 30", icon: "➕" },
-  { story: "selisih x dan y adalah 8", eq: "x − y = 8", icon: "➖" },
-  { story: "x 5 lebih banyak dari y", eq: "x = y + 5", icon: "⬆️" },
-  { story: "x 5 lebih sedikit dari y", eq: "x = y − 5", icon: "⬇️" },
-  { story: "2 kali x ditambah y adalah 20", eq: "2x + y = 20", icon: "✖️" },
-  { story: "harga 2 buku dan 3 pensil Rp19.000", eq: "2x + 3y = 19.000", icon: "📚" },
-  { story: "jumlah kendaraan (motor dan mobil) 40", eq: "x + y = 40", icon: "🚗" },
-  { story: "jumlah roda (motor dan mobil) 100", eq: "2x + 4y = 100", icon: "⚙️" },
+export const translations: { story: string; eq: string; icon: IconName }[] = [
+  { story: "jumlah x dan y adalah 30", eq: "x + y = 30", icon: "plus" },
+  { story: "selisih x dan y adalah 8", eq: "x − y = 8", icon: "minus" },
+  { story: "x 5 lebih banyak dari y", eq: "x = y + 5", icon: "up" },
+  { story: "x 5 lebih sedikit dari y", eq: "x = y − 5", icon: "down" },
+  { story: "2 kali x ditambah y adalah 20", eq: "2x + y = 20", icon: "times" },
+  { story: "harga 2 buku dan 3 pensil Rp19.000", eq: "2x + 3y = 19.000", icon: "books" },
+  { story: "jumlah kendaraan (motor dan mobil) 40", eq: "x + y = 40", icon: "car" },
+  { story: "jumlah roda (motor dan mobil) 100", eq: "2x + 4y = 100", icon: "wheel" },
 ];
 
 /* ─── Bab III · Tiga Mantra ─────────────────────────────── */
@@ -26,7 +28,7 @@ export type Method = {
   key: string;
   name: string;
   spell: string;
-  icon: string;
+  icon: IconName;
   color: string;
   idea: string;
   steps: Step[];
@@ -43,7 +45,7 @@ export const methods: Method[] = [
     key: "sub",
     name: "Substitusi",
     spell: "Mantra Penukar",
-    icon: "🔁",
+    icon: "swap",
     color: "#e8478f",
     idea: "Ubah satu persamaan jadi “x = …”, lalu tukarkan (substitusikan) ke persamaan lainnya.",
     steps: [
@@ -58,7 +60,7 @@ export const methods: Method[] = [
     key: "eli",
     name: "Eliminasi",
     spell: "Mantra Penghilang",
-    icon: "💨",
+    icon: "poof",
     color: "#129e94",
     idea: "Jumlahkan atau kurangkan kedua persamaan supaya salah satu variabel lenyap.",
     steps: [
@@ -85,7 +87,7 @@ export const methods: Method[] = [
     key: "mix",
     name: "Campuran",
     spell: "Mantra Gabungan",
-    icon: "🌀",
+    icon: "swirl",
     color: "#6a4bc4",
     idea: "Eliminasi dulu untuk satu variabel, lalu substitusikan hasilnya. Paling cepat untuk TKA!",
     steps: [
@@ -108,7 +110,7 @@ export type Quest = {
   id: string;
   type: string;
   place: string;
-  icon: string;
+  icon: IconName;
   color: string;
   story: string;
   vars: string[];
@@ -124,7 +126,7 @@ export const quests: Quest[] = [
     id: "nilai",
     type: "Menentukan Nilai Variabel",
     place: "Pohon Angka",
-    icon: "🌳",
+    icon: "tree",
     color: "#e8478f",
     story: "Jumlah dua bilangan adalah 42 dan selisihnya 10. Bilangan yang lebih besar adalah ....",
     vars: ["x", "y"],
@@ -141,7 +143,7 @@ export const quests: Quest[] = [
     id: "kali",
     type: "Menentukan Hasil Kali",
     place: "Jembatan Perkalian",
-    icon: "🌉",
+    icon: "bridge",
     color: "#f08a24",
     story: "Jumlah dua bilangan cacah sama dengan 37 dan selisihnya 3. Hasil kali kedua bilangan itu adalah ...",
     vars: ["x", "y"],
@@ -159,7 +161,7 @@ export const quests: Quest[] = [
     id: "umur",
     type: "Menentukan Umur",
     place: "Pondok Kakak & Adik",
-    icon: "🏡",
+    icon: "cottage",
     color: "#25a06b",
     story: "Jumlah umur kakak dan adik adalah 28 tahun. Umur kakak 6 tahun lebih tua daripada adik. Berapa umur masing-masing?",
     vars: ["x", "y"],
@@ -179,7 +181,7 @@ export const quests: Quest[] = [
     id: "harga",
     type: "Harga Barang",
     place: "Perpustakaan Burung Hantu",
-    icon: "📚",
+    icon: "books",
     color: "#2b8cff",
     story: "2 buku dan 3 pensil berharga Rp19.000. Sedangkan 3 buku dan 2 pensil berharga Rp21.000. Harga buku dan pensil adalah ...",
     vars: ["x", "y"],
@@ -199,7 +201,7 @@ export const quests: Quest[] = [
     id: "benda",
     type: "Jumlah Benda dan Total",
     place: "Lapangan Desa Hutan",
-    icon: "🚗",
+    icon: "car",
     color: "#7c5ce6",
     story: "Di tempat parkir terdapat 30 kendaraan yang terdiri atas mobil dan motor. Jumlah seluruh roda adalah 86. Jumlah mobil dan motor masing-masing adalah ...",
     vars: ["x", "y"],
@@ -219,7 +221,7 @@ export const quests: Quest[] = [
     id: "geo",
     type: "Geometri",
     place: "Padang Bunga Peri",
-    icon: "🌷",
+    icon: "flower",
     color: "#e6457a",
     story: "Sebuah taman berbentuk persegi panjang memiliki keliling 50 m. Panjang taman 5 m lebih besar daripada lebarnya. Hitung luas taman tersebut.",
     vars: ["p", "l"],
@@ -237,7 +239,7 @@ export const quests: Quest[] = [
     id: "uang",
     type: "Uang dan Pecahan",
     place: "Peti Harta Kurcaci",
-    icon: "💰",
+    icon: "pouch",
     color: "#d99a1e",
     story: "Sebuah kotak berisi 40 lembar uang pecahan Rp2.000 dan Rp5.000. Jumlah seluruh uang adalah Rp140.000. Berapa banyak masing-masing pecahan?",
     vars: ["x", "y"],
@@ -261,7 +263,7 @@ export const quests: Quest[] = [
     id: "banding",
     type: "Membandingkan Dua Situasi",
     place: "Toko Roti Peri",
-    icon: "🥐",
+    icon: "bread",
     color: "#0fa3b1",
     story: "Paket A terdiri dari 2 roti dan 1 susu seharga Rp17.000. Paket B terdiri dari 1 roti dan 2 susu seharga Rp16.000. Jika Rani membeli 3 roti dan 2 susu, berapa yang harus dibayar?",
     vars: ["r", "s"],
@@ -280,7 +282,7 @@ export const quests: Quest[] = [
     id: "nalar",
     type: "Soal Penalaran",
     place: "Gua Teka-Teki",
-    icon: "🕳️",
+    icon: "cave",
     color: "#17402f",
     story: "Diberikan: x + y = 40 dan x − y = 8. Nilai x dan y adalah ...",
     vars: ["x", "y"],
@@ -299,18 +301,18 @@ export const quests: Quest[] = [
 ];
 
 /* ─── Bab V · Strategi Cepat ────────────────────────────── */
-export const strategy: { word: string; hint: string; icon: string }[] = [
-  { word: "BACA", hint: "Cari informasi penting dalam soal.", icon: "📖" },
-  { word: "MISALKAN", hint: "Tentukan apa itu x dan apa itu y.", icon: "🏷️" },
-  { word: "MODELKAN", hint: "Ubah cerita menjadi dua persamaan.", icon: "✨" },
-  { word: "SELESAIKAN", hint: "Gunakan substitusi atau eliminasi.", icon: "⚔️" },
-  { word: "KEMBALI KE PERTANYAAN", hint: "Jawab yang benar-benar ditanyakan!", icon: "🌳" },
+export const strategy: { word: string; hint: string; icon: IconName }[] = [
+  { word: "BACA", hint: "Cari informasi penting dalam soal.", icon: "book" },
+  { word: "MISALKAN", hint: "Tentukan apa itu x dan apa itu y.", icon: "tag" },
+  { word: "MODELKAN", hint: "Ubah cerita menjadi dua persamaan.", icon: "wand" },
+  { word: "SELESAIKAN", hint: "Gunakan substitusi atau eliminasi.", icon: "swords" },
+  { word: "KEMBALI KE PERTANYAAN", hint: "Jawab yang benar-benar ditanyakan!", icon: "tree" },
 ];
 
-export const returnRules: { ask: string; then: string; icon: string }[] = [
-  { ask: "Soal bertanya hasil kali", then: "hitung x · y", icon: "✖️" },
-  { ask: "Soal bertanya jumlah harga", then: "hitung sesuai konteks", icon: "🛒" },
-  { ask: "Soal bertanya luas", then: "gunakan rumus luas", icon: "📐" },
+export const returnRules: { ask: string; then: string; icon: IconName }[] = [
+  { ask: "Soal bertanya hasil kali", then: "hitung x · y", icon: "times" },
+  { ask: "Soal bertanya jumlah harga", then: "hitung sesuai konteks", icon: "basket" },
+  { ask: "Soal bertanya luas", then: "gunakan rumus luas", icon: "ruler" },
 ];
 
 /* ─── Ujian Sang Penyihir (kuis kelas) ──────────────────── */
@@ -327,9 +329,9 @@ export type QuizQ = {
 };
 
 export const quizLevels = {
-  1: { name: "Desa Jamur", sub: "Pemanasan", color: "#25a06b", icon: "🍄", range: "Soal 1 – 5" },
-  2: { name: "Hutan Kunang-Kunang", sub: "Tantangan", color: "#6a4bc4", icon: "🌲", range: "Soal 6 – 10" },
-  3: { name: "Sarang Naga", sub: "Level Bos", color: "#e8478f", icon: "🐉", range: "Soal 11 – 16" },
+  1: { name: "Desa Jamur", sub: "Pemanasan", color: "#25a06b", icon: "mushroom", range: "Soal 1 – 5" },
+  2: { name: "Hutan Kunang-Kunang", sub: "Tantangan", color: "#6a4bc4", icon: "pine", range: "Soal 6 – 10" },
+  3: { name: "Sarang Naga", sub: "Level Bos", color: "#e8478f", icon: "dragon", range: "Soal 11 – 16" },
 } as const;
 
 export const quizQuestions: QuizQ[] = [
