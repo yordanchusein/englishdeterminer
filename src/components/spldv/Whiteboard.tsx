@@ -129,11 +129,15 @@ export default function Whiteboard() {
           </label>
           <button className={button} disabled={cursor === 0} onClick={() => setCursor(cursor - 1)}>Undo</button>
           <button className={button} disabled={cursor === history.length - 1} onClick={() => setCursor(cursor + 1)}>Redo</button>
-          <button className={button} aria-pressed={grid} onClick={() => setGrid(!grid)}>Kisi {grid ? "aktif" : "nonaktif"}</button>
+          <button className={button} style={grid ? { backgroundColor: "#6a4bc4", color: "#fff", borderColor: "#6a4bc4" } : undefined} aria-pressed={grid} onClick={() => setGrid(!grid)}>Kisi {grid ? "aktif" : "nonaktif"}</button>
           <button className={button} disabled={!strokes.length} onClick={() => commit([])}>Bersihkan</button>
           <button className={button} onClick={download}>Simpan PNG</button>
         </div>
-        <div className="overflow-hidden rounded-2xl border-4 border-quill bg-parch shadow-tale" style={grid ? { backgroundImage: "radial-gradient(#5d4d8540 1px, transparent 1px)", backgroundSize: "24px 24px" } : undefined}>
+        <div className="overflow-hidden rounded-2xl border-4 border-quill bg-parch shadow-tale" style={grid ? {
+          backgroundImage: "radial-gradient(circle, #89729a 2px, transparent 2px), linear-gradient(to right, rgba(93,77,133,0.18) 1px, transparent 1px), linear-gradient(to bottom, rgba(93,77,133,0.18) 1px, transparent 1px)",
+          backgroundSize: "24px 24px",
+          backgroundPosition: "12px 12px, 0 0, 0 0",
+        } : undefined}>
           <canvas ref={canvas} width={WIDTH} height={HEIGHT} onPointerDown={start} onPointerMove={move} onPointerUp={finish} onPointerCancel={finish} onLostPointerCapture={finish} aria-label="Area menggambar bebas. Gunakan mouse, stylus, atau jari untuk menulis." className="block aspect-[12/7] w-full touch-none" style={{ cursor: erase ? "cell" : "crosshair" }}>Papan tulis membutuhkan browser yang mendukung canvas.</canvas>
         </div>
         <p className="mt-5 text-sm text-quill-soft">Salah hapus? Tekan Undo. Unduh PNG sebelum meninggalkan halaman; coretan hanya tersimpan selama halaman ini terbuka. Putar ponsel ke posisi mendatar untuk ruang tulis lebih luas.</p>
