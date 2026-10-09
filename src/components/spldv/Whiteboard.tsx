@@ -1,6 +1,7 @@
 "use client";
 
-import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { RESUME_KEY } from "./resume";
 import PenSizePicker from "./PenSizePicker";
 import { whiteboardButton as button } from "./whiteboardStyles";
 import { useEffect, useRef, useState, type PointerEvent } from "react";
@@ -43,6 +44,7 @@ function paint(canvas: HTMLCanvasElement, strokes: Stroke[]) {
 }
 
 export default function Whiteboard() {
+  const router = useRouter();
   const canvas = useRef<HTMLCanvasElement>(null);
   const active = useRef<{ id: number; stroke: Stroke } | null>(null);
   const [history, setHistory] = useState<Stroke[][]>([[]]);
@@ -105,6 +107,18 @@ export default function Whiteboard() {
     link.click();
   }
 
+  // Opened in its own tab: close it to reveal the lesson exactly as it was.
+  // Otherwise (or if the browser refuses), go back and let the lesson resume.
+  const backToLesson = () => {
+    if (window.history.length <= 1) window.close();
+    setTimeout(() => {
+      try {
+        localStorage.setItem(RESUME_KEY, "1");
+      } catch {}
+      router.push("/spldv");
+    }, 150);
+  };
+
   return (
     <main lang="id" className="tale-parch min-h-dvh p-4 font-round text-quill sm:p-8">
       <div className="mx-auto max-w-7xl">
@@ -113,7 +127,7 @@ export default function Whiteboard() {
             <p className="text-sm font-bold uppercase tracking-widest text-quill-soft">Ruang belajar kerajaan</p>
             <h1 className="font-tale text-4xl font-black sm:text-5xl">Papan Mantra</h1>
           </div>
-          <Link href="/spldv" className={button}>Kembali ke materi</Link>
+          <button className={button} onClick={backToLesson}>Kembali ke materi</button>
         </header>
         <p className="mb-4">Tulis persamaan, coret langkah, dan temukan nilai x serta y. Gunakan mouse, stylus, atau jari.</p>
         <div aria-label="Alat papan tulis" className="mb-4 flex flex-wrap items-center gap-3 rounded-2xl border-2 border-quill/20 bg-parch-deep/60 p-3">

@@ -111,7 +111,7 @@ export default function Translator() {
 
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
           {translations.map((t, i) => (
-            <div key={t.story} className="rv tr-card flip-3d h-[clamp(190px,24vh,240px)]">
+            <div key={t.story} className="rv tr-card flip-3d">
               <div className="flip-inner relative h-full w-full">
                 {/* front: the story */}
                 <div
@@ -119,7 +119,7 @@ export default function Translator() {
                   tabIndex={challenge ? -1 : 0}
                   onClick={() => !challenge && flip(i)}
                   onKeyDown={(e) => !challenge && (e.key === "Enter" || e.key === " ") && (e.preventDefault(), flip(i))}
-                  className={`flip-face absolute inset-0 flex flex-col rounded-3xl border-[3px] border-quill bg-white p-4 shadow-tale ${
+                  className={`flip-face relative flex h-full min-h-[clamp(190px,24vh,240px)] flex-col rounded-3xl border-[3px] border-quill bg-white p-4 shadow-tale ${
                     challenge ? "" : "cursor-pointer transition-transform hover:-translate-y-1 hover:rotate-[-1deg]"
                   }`}
                 >
@@ -127,14 +127,14 @@ export default function Translator() {
                     <span className="text-2xl">{t.icon}</span>
                     <span className="font-round text-xs font-black uppercase tracking-[0.2em] text-quill-soft">Cerita</span>
                   </div>
-                  <p className="mt-2 flex-1 font-tale text-[clamp(1.05rem,1.3vw,1.35rem)] font-bold leading-snug">“{t.story}”</p>
+                  <p className={`mt-2 font-tale text-[clamp(1.05rem,1.3vw,1.35rem)] font-bold leading-snug ${challenge ? "" : "flex-1"}`}>“{t.story}”</p>
                   {challenge ? (
-                    <div className="mt-2 grid gap-1.5">
+                    <div className="mt-auto grid gap-1.5 pt-3">
                       {CHOICES[i].map((c) => (
                         <button
                           key={c}
                           onClick={(e) => guess(i, c, e.currentTarget)}
-                          className={`rounded-xl border-2 border-quill px-2 py-1 text-left text-[0.95rem] transition-colors hover:bg-gold ${
+                          className={`rounded-xl border-2 border-quill px-3 py-1.5 text-left text-[clamp(0.9rem,1vw,1rem)] transition-colors hover:bg-gold ${
                             wrong === `${i}:${c}` ? "bg-bad/20 line-through" : "bg-parch"
                           }`}
                         >
@@ -143,7 +143,7 @@ export default function Translator() {
                       ))}
                     </div>
                   ) : (
-                    <span className="font-round text-xs font-extrabold text-violet">✨ ketuk untuk menerjemahkan</span>
+                    <span className="mt-3 font-round text-xs font-extrabold text-violet">✨ ketuk untuk menerjemahkan</span>
                   )}
                 </div>
 
@@ -165,7 +165,7 @@ export default function Translator() {
           ))}
         </div>
 
-        <p className="rv mt-6 font-round text-sm font-bold text-quill-soft">
+        <p className="rv mt-8 font-round text-sm font-bold text-quill-soft">
           💡 Ingat: <b>jumlah</b> → tambah, <b>selisih</b> → kurang, <b>lebih banyak</b> → “x = y + …”, <b>kali</b> → koefisien.
           Untuk roda, motor = 2 roda, mobil = 4 roda.
         </p>

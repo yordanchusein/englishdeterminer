@@ -16,6 +16,7 @@ import Quests from "./Quests";
 import Strategy from "./Strategy";
 import ForestGate from "./ForestGate";
 import Quiz from "./quiz/Quiz";
+import { POS_KEY, RESUME_KEY } from "./resume";
 
 const CHAPTERS = [
   { id: "top", label: "Awal" },
@@ -51,6 +52,7 @@ export default function SpldvExperience() {
   const [modalOpen, setModalOpen] = useState(false);
   const [muted, setMutedState] = useState(false);
   const blocked = useRef(false);
+  const saving = useRef(false);
 
   useEffect(() => {
     blocked.current = quizOpen || modalOpen;
@@ -62,11 +64,22 @@ export default function SpldvExperience() {
     const lenis = new Lenis({ lerp: 0.09 });
     setLenis(lenis);
     lenis.on("scroll", ScrollTrigger.update);
+    let saveId = 0;
+    lenis.on("scroll", () => {
+      if (!saving.current) return;
+      clearTimeout(saveId);
+      saveId = window.setTimeout(() => {
+        try {
+          localStorage.setItem(POS_KEY, String(Math.round(lenis.scroll)));
+        } catch {}
+      }, 200);
+    });
     const raf = (t: number) => lenis.raf(t * 1000);
     gsap.ticker.add(raf);
     gsap.ticker.lagSmoothing(120, 33);
     lenis.stop();
     return () => {
+      clearTimeout(saveId);
       gsap.ticker.remove(raf);
       lenis.destroy();
       setLenis(null);
@@ -82,6 +95,41 @@ export default function SpldvExperience() {
   }, [loaded, quizOpen, modalOpen]);
 
   useEffect(() => onMuteChange(setMutedState), []);
+
+  /* back from the whiteboard: skip the book intro and land where we left off */
+  useEffect(() => {
+    let resume = false;
+    let y = 0;
+    try {
+      resume = localStorage.getItem(RESUME_KEY) === "1" || document.referrer.includes("/spldv/papan-tulis");
+      y = Number(localStorage.getItem(POS_KEY)) || 0;
+    } catch {}
+    if (!resume) {
+      saving.current = true;
+      return;
+    }
+    let cancelled = false;
+    // the flag is cleared here, not above, so a StrictMode re-run still sees it
+    const id = setTimeout(() => {
+      try {
+        localStorage.removeItem(RESUME_KEY);
+      } catch {}
+      setRevealed(true);
+      setLoaded(true);
+      document.fonts.ready.then(() =>
+        setTimeout(() => {
+          if (cancelled) return;
+          ScrollTrigger.refresh();
+          getLenis()?.scrollTo(y, { immediate: true, force: true });
+          saving.current = true;
+        }, 60),
+      );
+    }, 0);
+    return () => {
+      cancelled = true;
+      clearTimeout(id);
+    };
+  }, []);
 
   useGSAP(() => {
     gsap.to(".hud-progress", { scaleX: 1, ease: "none", scrollTrigger: { start: 0, end: "max", scrub: 0.3 } });
