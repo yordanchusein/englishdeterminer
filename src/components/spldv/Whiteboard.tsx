@@ -122,11 +122,20 @@ export default function Whiteboard() {
           <div className="flex gap-2" role="group" aria-label="Warna pena">
             {COLORS.map((item) => <button key={item.value} aria-label={item.name} aria-pressed={color === item.value && !erase} onClick={() => { setColor(item.value); setErase(false); }} className="flex size-11 items-center justify-center rounded-full border-2 border-white text-xl text-white outline-offset-2 focus-visible:outline-2 focus-visible:outline-quill" style={{ background: item.value }}>{color === item.value && !erase ? "✓" : ""}</button>)}
           </div>
-          <label className="flex min-h-11 items-center gap-2 px-2 font-bold">Ukuran
-            <select value={width} onChange={(event) => setWidth(Number(event.target.value))} className="min-h-11 rounded-lg border border-quill/30 bg-white px-2">
-              <option value={3}>Tipis</option><option value={5}>Sedang</option><option value={10}>Tebal</option>
-            </select>
-          </label>
+          <div className="flex min-h-11 flex-wrap items-center gap-2 rounded-xl px-1">
+            <label htmlFor="pen-width" className="font-bold">Ukuran pena</label>
+            <div className="relative">
+              <span aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-3 flex w-5 items-center justify-center">
+                <span className="rounded-full" style={{ width, height: width, backgroundColor: color }} />
+              </span>
+              <select id="pen-width" value={width} onChange={(event) => setWidth(Number(event.target.value))} className="min-h-12 min-w-44 cursor-pointer appearance-none rounded-xl border-2 border-quill/30 bg-white py-2 pl-10 pr-10 font-bold text-quill shadow-sm transition-colors hover:border-violet focus-visible:border-violet focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet">
+                <option value={3}>Tipis · 3 px</option><option value={5}>Sedang · 5 px</option><option value={10}>Tebal · 10 px</option>
+              </select>
+              <svg aria-hidden="true" viewBox="0 0 20 20" fill="none" className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-quill-soft">
+                <path d="m5 7 5 5 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </div>
+          </div>
           <button className={button} disabled={cursor === 0} onClick={() => setCursor(cursor - 1)}>Undo</button>
           <button className={button} disabled={cursor === history.length - 1} onClick={() => setCursor(cursor + 1)}>Redo</button>
           <button className={button} style={grid ? { backgroundColor: "#6a4bc4", color: "#fff", borderColor: "#6a4bc4" } : undefined} aria-pressed={grid} onClick={() => setGrid(!grid)}>Kisi {grid ? "aktif" : "nonaktif"}</button>
