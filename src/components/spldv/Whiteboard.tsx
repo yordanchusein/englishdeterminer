@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import PenSizePicker from "./PenSizePicker";
 import { useEffect, useRef, useState, type PointerEvent } from "react";
 
 type Point = { x: number; y: number };
@@ -49,7 +50,6 @@ export default function Whiteboard() {
   const [color, setColor] = useState(COLORS[0].value);
   const [width, setWidth] = useState(5);
   const [erase, setErase] = useState(false);
-  const [grid, setGrid] = useState(true);
   const strokes = history[cursor];
 
   useEffect(() => {
@@ -122,31 +122,17 @@ export default function Whiteboard() {
           <div className="flex gap-2" role="group" aria-label="Warna pena">
             {COLORS.map((item) => <button key={item.value} aria-label={item.name} aria-pressed={color === item.value && !erase} onClick={() => { setColor(item.value); setErase(false); }} className="flex size-11 items-center justify-center rounded-full border-2 border-white text-xl text-white outline-offset-2 focus-visible:outline-2 focus-visible:outline-quill" style={{ background: item.value }}>{color === item.value && !erase ? "✓" : ""}</button>)}
           </div>
-          <div className="flex min-h-11 flex-wrap items-center gap-2 rounded-xl px-1">
-            <label htmlFor="pen-width" className="font-bold">Ukuran pena</label>
-            <div className="relative">
-              <span aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-3 flex w-5 items-center justify-center">
-                <span className="rounded-full" style={{ width, height: width, backgroundColor: color }} />
-              </span>
-              <select id="pen-width" value={width} onChange={(event) => setWidth(Number(event.target.value))} className="min-h-12 min-w-44 cursor-pointer appearance-none rounded-xl border-2 border-quill/30 bg-white py-2 pl-10 pr-10 font-bold text-quill shadow-sm transition-colors hover:border-violet focus-visible:border-violet focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet">
-                <option value={3}>Tipis · 3 px</option><option value={5}>Sedang · 5 px</option><option value={10}>Tebal · 10 px</option>
-              </select>
-              <svg aria-hidden="true" viewBox="0 0 20 20" fill="none" className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-quill-soft">
-                <path d="m5 7 5 5 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </div>
-          </div>
+          <PenSizePicker value={width} color={color} onChange={setWidth} />
           <button className={button} disabled={cursor === 0} onClick={() => setCursor(cursor - 1)}>Undo</button>
           <button className={button} disabled={cursor === history.length - 1} onClick={() => setCursor(cursor + 1)}>Redo</button>
-          <button className={button} style={grid ? { backgroundColor: "#6a4bc4", color: "#fff", borderColor: "#6a4bc4" } : undefined} aria-pressed={grid} onClick={() => setGrid(!grid)}>Kisi {grid ? "aktif" : "nonaktif"}</button>
           <button className={button} disabled={!strokes.length} onClick={() => commit([])}>Bersihkan</button>
           <button className={button} onClick={download}>Simpan PNG</button>
         </div>
-        <div className="overflow-hidden rounded-2xl border-4 border-quill bg-parch shadow-tale" style={grid ? {
+        <div className="overflow-hidden rounded-2xl border-4 border-quill bg-parch shadow-tale" style={{
           backgroundImage: "radial-gradient(circle, #89729a 2px, transparent 2px), linear-gradient(to right, rgba(93,77,133,0.18) 1px, transparent 1px), linear-gradient(to bottom, rgba(93,77,133,0.18) 1px, transparent 1px)",
           backgroundSize: "24px 24px",
           backgroundPosition: "12px 12px, 0 0, 0 0",
-        } : undefined}>
+        }}>
           <canvas ref={canvas} width={WIDTH} height={HEIGHT} onPointerDown={start} onPointerMove={move} onPointerUp={finish} onPointerCancel={finish} onLostPointerCapture={finish} aria-label="Area menggambar bebas. Gunakan mouse, stylus, atau jari untuk menulis." className="block aspect-[12/7] w-full touch-none" style={{ cursor: erase ? "cell" : "crosshair" }}>Papan tulis membutuhkan browser yang mendukung canvas.</canvas>
         </div>
         <p className="mt-5 text-sm text-quill-soft">Salah hapus? Tekan Undo. Unduh PNG sebelum meninggalkan halaman; coretan hanya tersimpan selama halaman ini terbuka. Putar ponsel ke posisi mendatar untuk ruang tulis lebih luas.</p>
