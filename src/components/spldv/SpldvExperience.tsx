@@ -2,6 +2,7 @@
 
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 import Lenis from "lenis";
+import Link from "next/link";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 import { getLenis, getStops, setLenis } from "@/lib/scroll";
 import { isMuted, onMuteChange, setMuted, sfx } from "@/lib/sound";
@@ -171,6 +172,9 @@ export default function SpldvExperience() {
             ))}
           </nav>
           <div className="pointer-events-auto flex gap-2">
+            <Link href="/spldv/papan-tulis" target="_blank" rel="noopener noreferrer" className="flex min-h-11 items-center rounded-full border-[3px] border-quill bg-parch/95 px-3 text-sm font-bold shadow-tale-sm" aria-label="Papan tulis (buka tab baru)">
+              Papan tulis
+            </Link>
             <button
               onClick={() => setMuted(!muted)}
               title="Suara (M)"
