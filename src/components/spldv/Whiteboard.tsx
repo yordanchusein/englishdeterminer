@@ -129,9 +129,7 @@ export default function Whiteboard() {
           <button className={button} onClick={download}>Simpan PNG</button>
         </div>
         <div className="overflow-hidden rounded-2xl border-4 border-quill bg-parch shadow-tale" style={{
-          backgroundImage: "radial-gradient(circle, #89729a 2px, transparent 2px), linear-gradient(to right, rgba(93,77,133,0.18) 1px, transparent 1px), linear-gradient(to bottom, rgba(93,77,133,0.18) 1px, transparent 1px)",
-          backgroundSize: "24px 24px",
-          backgroundPosition: "12px 12px, 0 0, 0 0",
+          backgroundImage: "repeating-linear-gradient(to bottom, transparent 0, transparent 31px, rgba(93,77,133,0.3) 31px, rgba(93,77,133,0.3) 32px)",
         }}>
           <canvas ref={canvas} width={WIDTH} height={HEIGHT} onPointerDown={start} onPointerMove={move} onPointerUp={finish} onPointerCancel={finish} onLostPointerCapture={finish} aria-label="Area menggambar bebas. Gunakan mouse, stylus, atau jari untuk menulis." className="block aspect-[12/7] w-full touch-none" style={{ cursor: erase ? "cell" : "crosshair" }}>Papan tulis membutuhkan browser yang mendukung canvas.</canvas>
         </div>
