@@ -1,9 +1,10 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 import Lenis from "lenis";
 import Link from "next/link";
-import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
+import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap-lite";
 import { getLenis, getStops, setLenis } from "@/lib/scroll";
 import { isMuted, onMuteChange, setMuted, sfx } from "@/lib/sound";
 import BookLoader from "./BookLoader";
@@ -15,8 +16,11 @@ import Methods from "./Methods";
 import Quests from "./Quests";
 import Strategy from "./Strategy";
 import ForestGate from "./ForestGate";
-import Quiz from "./quiz/Quiz";
 import { POS_KEY, RESUME_KEY } from "./resume";
+
+// the exam is only needed at the very end: fetch it once the page is idle
+const loadQuiz = () => import("./quiz/Quiz");
+const Quiz = dynamic(loadQuiz, { ssr: false });
 import Icon from "./Icons";
 
 const CHAPTERS = [
@@ -50,6 +54,7 @@ export default function SpldvExperience() {
   const [revealed, setRevealed] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [quizOpen, setQuizOpen] = useState(false);
+  const [quizMounted, setQuizMounted] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [muted, setMutedState] = useState(false);
   const blocked = useRef(false);
@@ -96,6 +101,12 @@ export default function SpldvExperience() {
   }, [loaded, quizOpen, modalOpen]);
 
   useEffect(() => onMuteChange(setMutedState), []);
+
+  useEffect(() => {
+    if (!loaded) return;
+    const idle = window.requestIdleCallback ?? ((cb: () => void) => window.setTimeout(cb, 1500));
+    idle(() => void loadQuiz());
+  }, [loaded]);
 
   /* back from the whiteboard: skip the book intro and land where we left off */
   useEffect(() => {
@@ -150,6 +161,7 @@ export default function SpldvExperience() {
   const onModal = useCallback((o: boolean) => setModalOpen(o), []);
   const openQuiz = useCallback(() => {
     sfx.click();
+    setQuizMounted(true);
     setQuizOpen(true);
   }, []);
 
@@ -247,7 +259,7 @@ export default function SpldvExperience() {
         <Lesson onStart={openQuiz} onModal={onModal} />
       </main>
 
-      <Quiz open={quizOpen} onClose={closeQuiz} />
+      {quizMounted && <Quiz open={quizOpen} onClose={closeQuiz} />}
     </div>
   );
 }

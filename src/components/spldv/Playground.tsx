@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState, type PointerEvent } from "react";
-import { gsap, useGSAP } from "@/lib/gsap";
+import { gsap, useGSAP } from "@/lib/gsap-lite";
 import { burstFrom } from "@/lib/confetti";
 import { sfx } from "@/lib/sound";
 import { ChapterTitle, Section } from "./Chapter";

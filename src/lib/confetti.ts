@@ -1,4 +1,8 @@
-import { gsap } from "./gsap";
+import gsap from "gsap";
+import { Physics2DPlugin } from "gsap/Physics2DPlugin";
+
+// registers only what the confetti needs, so pages can pick their own GSAP setup
+if (typeof window !== "undefined") gsap.registerPlugin(Physics2DPlugin);
 
 const COLORS = ["#FF7A45", "#2B8CFF", "#E6457A", "#25A06B", "#FFC83D", "#7C5CE6", "#0FA3B1", "#FFFFFF"];
 
@@ -24,9 +28,17 @@ function piece(x: number, y: number) {
   return p;
 }
 
+/**
+ * Confetti is often fired from a component's GSAP context (e.g. a quiz card).
+ * Starting the tweens in a microtask keeps them out of that context, so when
+ * the component unmounts its revert can't freeze half-flown pieces on screen.
+ */
+const detached = (fn: () => void) => queueMicrotask(fn);
+
 /** Radial burst from a point (e.g. the clicked answer). */
 export function burst(x: number, y: number, count = 70) {
-  for (let i = 0; i < count; i++) {
+  detached(() => {
+    for (let i = 0; i < count; i++) {
     const p = piece(x, y);
     gsap.to(p, {
       duration: gsap.utils.random(1.4, 2.4),
@@ -40,14 +52,17 @@ export function burst(x: number, y: number, count = 70) {
       opacity: 0,
       ease: "power1.in",
       onComplete: () => p.remove(),
+      onInterrupt: () => p.remove(),
     });
-  }
+    }
+  });
 }
 
 /** Rain from the top of the screen (results screen). */
 export function rain(count = 160) {
   const w = window.innerWidth;
-  for (let i = 0; i < count; i++) {
+  detached(() => {
+    for (let i = 0; i < count; i++) {
     const p = piece(gsap.utils.random(0, w), -30);
     gsap.to(p, {
       delay: gsap.utils.random(0, 1.6),
@@ -58,8 +73,10 @@ export function rain(count = 160) {
       rotationY: gsap.utils.random(-720, 720),
       ease: "none",
       onComplete: () => p.remove(),
+      onInterrupt: () => p.remove(),
     });
-  }
+    }
+  });
 }
 
 export function burstFrom(el: Element | null, count?: number) {

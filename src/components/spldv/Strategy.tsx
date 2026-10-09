@@ -1,13 +1,14 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { gsap, useGSAP } from "@/lib/gsap";
+import { gsap, useGSAP } from "@/lib/gsap-lite";
 import { burstFrom } from "@/lib/confetti";
 import { sfx } from "@/lib/sound";
 import { returnRules, strategy } from "@/data/spldv";
 import { ChapterTitle, Section } from "./Chapter";
 import { FairyX, GreatTree } from "./Scenery";
 import Icon from "./Icons";
+import { ambient } from "./ambient";
 
 // stepping stones along a gentle wave (percent of the track)
 const STONES = [
@@ -60,7 +61,9 @@ export default function Strategy() {
           scrollTrigger: { trigger: root.current, start: "top 70%", once: true },
         },
       );
-      gsap.to(".fx-wings", { scaleX: 0.7, duration: 0.18, repeat: -1, yoyo: true, ease: "sine.inOut" });
+      ambient(root.current!, () => {
+        gsap.to(".fx-wings", { scaleX: 0.7, duration: 0.18, repeat: -1, yoyo: true, ease: "sine.inOut" });
+      });
     },
     { scope: root },
   );

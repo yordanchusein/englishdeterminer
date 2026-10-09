@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { gsap, useGSAP } from "@/lib/gsap";
+import { gsap, useGSAP } from "@/lib/gsap-lite";
 import { burstFrom } from "@/lib/confetti";
 import { sfx } from "@/lib/sound";
 import { quizLevels, type QuizQ } from "@/data/spldv";

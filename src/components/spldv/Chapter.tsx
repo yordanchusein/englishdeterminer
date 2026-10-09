@@ -1,8 +1,9 @@
 "use client";
 
 import { useRef, type ReactNode } from "react";
-import { gsap, useGSAP } from "@/lib/gsap";
+import { gsap, useGSAP } from "@/lib/gsap-lite";
 import { Sparkle } from "./Scenery";
+import { ambient } from "./ambient";
 
 /** Chapter heading in the storybook style: “Bab II · …”. */
 export function ChapterTitle({ num, title, kicker, light = false }: { num: string; title: ReactNode; kicker: string; light?: boolean }) {
@@ -56,6 +57,8 @@ export function Section({
           scrollTrigger: { trigger: root.current, start: "top 65%", once: true },
         },
       );
+      // star backdrops (e.g. Bab III) only twinkle while on screen
+      ambient(root.current!, () => {});
     },
     { scope: root },
   );

@@ -1,9 +1,10 @@
 "use client";
 
 import { useRef } from "react";
-import { gsap, useGSAP } from "@/lib/gsap";
+import { gsap, useGSAP } from "@/lib/gsap-lite";
 import { GreatTree, Hills, Moon, Pine, Sparkle, Stars, TreeLine } from "./Scenery";
 import Icon from "./Icons";
+import { ambient } from "./ambient";
 
 export default function ForestGate({ onStart }: { onStart: () => void }) {
   const root = useRef<HTMLElement>(null);
@@ -15,8 +16,10 @@ export default function ForestGate({ onStart }: { onStart: () => void }) {
         .fromTo(".cg-castle", { yPercent: 40, scale: 0.8 }, { yPercent: 0, scale: 1, ease: "none" }, 0)
         .fromTo(".cg-moon", { y: 160 }, { y: 0, ease: "none" }, 0)
         .fromTo(".cg-text", { y: 80, opacity: 0 }, { y: 0, opacity: 1, ease: "none" }, 0.2);
-      gsap.to(".cg-btn-glow", { scale: 1.25, opacity: 0, duration: 1.4, repeat: -1, ease: "power2.out" });
-      gsap.to(".cg-spark", { rotation: 180, scale: "random(0.6,1.3)", duration: 2, repeat: -1, yoyo: true, ease: "sine.inOut", stagger: 0.3 });
+      ambient(root.current!, () => {
+        gsap.to(".cg-btn-glow", { scale: 1.25, opacity: 0, duration: 1.4, repeat: -1, ease: "power2.out" });
+        gsap.to(".cg-spark", { rotation: 180, scale: "random(0.6,1.3)", duration: 2, repeat: -1, yoyo: true, ease: "sine.inOut", stagger: 0.3 });
+      });
     },
     { scope: root },
   );

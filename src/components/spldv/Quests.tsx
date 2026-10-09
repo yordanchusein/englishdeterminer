@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { gsap, useGSAP } from "@/lib/gsap";
+import { gsap, useGSAP } from "@/lib/gsap-lite";
 import { burstFrom } from "@/lib/confetti";
 import { sfx } from "@/lib/sound";
 import { quests, type Quest } from "@/data/spldv";
@@ -10,6 +10,7 @@ import { ChapterTitle, Section } from "./Chapter";
 import StepPlayer from "./StepPlayer";
 import { Pine, Sparkle } from "./Scenery";
 import Icon from "./Icons";
+import { ambient } from "./ambient";
 
 const parse = (s: string) => Number(s.replace(/rp|m²|m2|tahun|\s|\./gi, "").replace(",", "."));
 
@@ -269,7 +270,9 @@ export default function Quests({ onModal }: { onModal: (open: boolean) => void }
           scrollTrigger: { trigger: root.current, start: "top 70%", once: true },
         },
       );
-      gsap.to(".qp-bob", { y: -6, duration: 1.4, repeat: -1, yoyo: true, ease: "sine.inOut", stagger: 0.2 });
+      ambient(root.current!, () => {
+        gsap.to(".qp-bob", { y: -6, duration: 1.4, repeat: -1, yoyo: true, ease: "sine.inOut", stagger: 0.2 });
+      });
     },
     { scope: root },
   );

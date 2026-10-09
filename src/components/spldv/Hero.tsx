@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { gsap, SplitText, useGSAP } from "@/lib/gsap";
+import { gsap, SplitText, useGSAP } from "@/lib/gsap-lite";
 import { sfx } from "@/lib/sound";
+import { ambient } from "./ambient";
 import { DragonY, FairyX, GreatTree, Hills, Moon, Pine, Sparkle, Stars, TreeLine } from "./Scenery";
 
 const CHIPS: { t: string; x: number; y: number; c: string }[] = [
@@ -44,7 +45,8 @@ export default function Hero({ ready }: { ready: boolean }) {
         .fromTo(".h-char", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.8, ease: "back.out(2.5)", stagger: 0.2 }, 1.8)
         .to(".h-hint", { opacity: 1, duration: 0.6 }, 3);
 
-      // ambient life
+      // ambient life — paused while the hero is scrolled away
+      const life = ambient(root.current!, () => {
       gsap.to(".moon-glow", { scale: 1.12, transformOrigin: "50% 50%", duration: 3, repeat: -1, yoyo: true, ease: "sine.inOut" });
       gsap.fromTo(".tree-lantern", { rotation: -6 }, { rotation: 6, duration: 1.6, repeat: -1, yoyo: true, ease: "sine.inOut", stagger: 0.3 });
       gsap.to(".tree-canopy", { rotation: 1.2, scale: 1.015, duration: 3.2, repeat: -1, yoyo: true, ease: "sine.inOut" });
@@ -85,6 +87,7 @@ export default function Hero({ ready }: { ready: boolean }) {
           delay: 4,
         },
       );
+      });
 
       // hover: chips spin, characters giggle
       gsap.utils.toArray<HTMLElement>(".h-chip").forEach((chip) => {
@@ -110,6 +113,7 @@ export default function Hero({ ready }: { ready: boolean }) {
         amt,
       }));
       const onMove = (e: MouseEvent) => {
+        if (!life.isActive) return;
         const nx = e.clientX / window.innerWidth - 0.5;
         const ny = e.clientY / window.innerHeight - 0.5;
         movers.forEach(({ x, y, amt }) => {

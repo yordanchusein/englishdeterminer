@@ -117,6 +117,14 @@ body {
   padding-bottom: 0.08em;
 }
 
+/* the home page loads its fonts in its own layout, so resolve the theme
+   font tokens (and the body font) where those variables exist */
+.home-fonts {
+  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-sans);
+}
+
 /* ─── /spldv ───────────────────────────────────────────── */
 /* the fonts are loaded by the /spldv layout, so re-resolve the theme
    font tokens where those variables actually exist */
@@ -137,6 +145,10 @@ body {
 }
 .tale-night {
   background: linear-gradient(180deg, #071c17 0%, #103529 38%, #215a40 66%, #5f9457 88%, #e6d48f 100%);
+}
+/* sections scrolled off screen (and the closed quiz) stop twinkling */
+.is-off .tw-star {
+  animation-play-state: paused;
 }
 .tale-parch {
   background-color: var(--color-parch);

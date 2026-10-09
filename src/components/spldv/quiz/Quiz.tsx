@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { gsap, SplitText, useGSAP } from "@/lib/gsap";
+import { gsap, SplitText, useGSAP } from "@/lib/gsap-lite";
 import { rain } from "@/lib/confetti";
 import { sfx } from "@/lib/sound";
 import { quizLevels, quizQuestions as questions } from "@/data/spldv";
@@ -277,7 +277,7 @@ export default function Quiz({ open, onClose }: { open: boolean; onClose: () => 
   return (
     <div
       ref={root}
-      className={`tale-night fixed inset-0 z-[60] overflow-hidden ${open ? "" : "pointer-events-none invisible"}`}
+      className={`tale-night fixed inset-0 z-[60] overflow-hidden ${open ? "" : "is-off pointer-events-none invisible"}`}
       style={{ clipPath: "circle(0% at 50% 80%)" }}
       aria-hidden={!open}
     >
