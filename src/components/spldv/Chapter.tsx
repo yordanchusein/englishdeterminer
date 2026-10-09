@@ -8,8 +8,8 @@ import { Sparkle } from "./Scenery";
 export function ChapterTitle({ num, title, kicker, light = false }: { num: string; title: ReactNode; kicker: string; light?: boolean }) {
   return (
     <div className="rv mb-[3vh]">
-      <div className="flex items-center gap-3">
-        <span className="rounded-full border-[3px] border-quill bg-gold px-4 py-1 font-tale text-sm font-black text-quill shadow-tale-sm">
+      <div className="flex flex-wrap items-center gap-3">
+        <span className="shrink-0 rounded-full border-[3px] border-quill bg-gold px-4 py-1 font-tale text-sm font-black text-quill shadow-tale-sm">
           Bab {num}
         </span>
         <Sparkle className="w-5" fill={light ? "#f7c548" : "#e8478f"} />
@@ -60,7 +60,7 @@ export function Section({
     { scope: root },
   );
   return (
-    <section ref={root} id={id} data-stop className={`relative min-h-screen overflow-hidden px-[5vw] py-[12vh] ${className}`}>
+    <section ref={root} id={id} data-stop className={`relative min-h-screen overflow-hidden px-[max(1.25rem,5vw)] pb-[clamp(4rem,10vh,8rem)] pt-[max(7rem,12vh)] ${className}`}>
       {children}
     </section>
   );

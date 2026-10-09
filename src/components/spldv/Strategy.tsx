@@ -10,16 +10,17 @@ import { FairyX, GreatTree } from "./Scenery";
 
 // stepping stones along a gentle wave (percent of the track)
 const STONES = [
-  { x: 6, y: 70 },
+  { x: 9, y: 62 },
   { x: 27, y: 38 },
   { x: 48, y: 66 },
   { x: 69, y: 34 },
-  { x: 90, y: 58 },
+  { x: 87, y: 58 },
 ];
 
 export default function Strategy() {
   const root = useRef<HTMLDivElement>(null);
-  const [step, setStep] = useState(-1);
+  const [step, setStep] = useState(0);
+  const hop = useRef<gsap.core.Timeline | null>(null);
 
   const { contextSafe } = useGSAP({ scope: root });
 
@@ -27,8 +28,9 @@ export default function Strategy() {
     if (i < 0 || i >= STONES.length) return;
     const s = STONES[i];
     sfx.pop();
-    gsap
-      .timeline()
+    hop.current?.kill();
+    gsap.killTweensOf(root.current!.querySelector(".st-panel"));
+    hop.current = gsap.timeline()
       .to(".st-fairy", { opacity: 1, duration: 0.2 }, 0)
       .to(".st-fairy", { left: `${s.x}%`, duration: 0.7, ease: "power2.inOut" }, 0)
       .to(".st-fairy", { keyframes: { top: [`${Math.min(s.y, 30) - 34}%`, `${s.y - 20}%`] }, duration: 0.7, ease: "power1.inOut" }, 0)
@@ -44,7 +46,7 @@ export default function Strategy() {
 
   useGSAP(
     () => {
-      gsap.set(".st-fairy", { left: `${STONES[0].x}%`, top: `${STONES[0].y - 20}%`, opacity: 0 });
+      gsap.set(".st-fairy", { left: `${STONES[0].x}%`, top: `${STONES[0].y - 20}%`, opacity: 1 });
       gsap.fromTo(
         ".st-stone",
         { y: 60, scale: 0 },
@@ -55,7 +57,6 @@ export default function Strategy() {
           ease: "back.out(2.2)",
           stagger: 0.12,
           scrollTrigger: { trigger: root.current, start: "top 70%", once: true },
-          onComplete: () => go(0),
         },
       );
       gsap.to(".fx-wings", { scaleX: 0.7, duration: 0.18, repeat: -1, yoyo: true, ease: "sine.inOut" });
@@ -71,7 +72,9 @@ export default function Strategy() {
       <ChapterTitle num="V" kicker="Menyeberangi sungai hutan" title={<>Strategi Cepat Mengerjakan SPLDV</>} />
 
       <div ref={root}>
-        <div className="rv relative h-[clamp(240px,36vh,360px)]">
+        <p className="mb-4 font-round text-sm font-bold text-quill-soft sm:hidden">Geser sungai untuk melihat semua langkah.</p>
+        <div data-lenis-prevent className="overflow-x-auto overscroll-x-contain rounded-2xl pb-8 pt-12">
+        <div className="relative h-[clamp(320px,40vh,420px)] min-w-[760px]">
           {/* the river the stones sit in */}
           <svg viewBox="0 0 1000 300" preserveAspectRatio="none" className="absolute inset-0 h-full w-full" aria-hidden>
             <path
@@ -89,7 +92,8 @@ export default function Strategy() {
             <button
               key={s.word}
               onClick={() => go(i)}
-              className="st-stone absolute flex -translate-x-1/2 -translate-y-1/2 flex-col items-center"
+              aria-pressed={step === i}
+              className="st-stone absolute flex w-[18%] -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-2 rounded-2xl focus-visible:outline-4 focus-visible:outline-violet"
               style={{ left: `${STONES[i].x}%`, top: `${STONES[i].y}%` }}
             >
               <span
@@ -99,7 +103,7 @@ export default function Strategy() {
               >
                 {s.icon}
               </span>
-              <span className="mt-2 whitespace-nowrap rounded-full border-2 border-quill bg-white px-2.5 py-0.5 font-round text-[clamp(0.65rem,0.85vw,0.9rem)] font-black">
+              <span className="max-w-full rounded-2xl border-2 border-quill bg-white px-3 py-1 text-center font-round text-[clamp(0.75rem,0.85vw,0.9rem)] font-black leading-snug">
                 {i + 1}. {s.word}
               </span>
             </button>
@@ -109,9 +113,10 @@ export default function Strategy() {
             <FairyX className="w-[clamp(46px,5vw,76px)] drop-shadow-[0_0_12px_rgba(255,126,179,0.8)]" />
           </div>
         </div>
+        </div>
 
         <div className="mt-8 grid gap-6 lg:grid-cols-[1fr_auto]">
-          <div className="st-panel min-h-[150px] rounded-3xl border-[3px] border-quill bg-white p-6 shadow-tale">
+          <div aria-live="polite" className="st-panel min-w-0 min-h-[150px] rounded-3xl border-[3px] border-quill bg-white p-[clamp(1.25rem,2.5vw,2.5rem)] shadow-tale">
             {cur ? (
               <>
                 <p className="font-round text-xs font-black uppercase tracking-[0.3em] text-quill-soft">Langkah {step + 1} dari 5</p>

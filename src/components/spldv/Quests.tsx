@@ -22,6 +22,7 @@ function QuestModal({ q, num, onClose, onSolved }: { q: Quest; num: number; onCl
 
   const { contextSafe } = useGSAP(
     () => {
+      const previous = document.activeElement;
       gsap
         .timeline()
         .fromTo(".qm-veil", { opacity: 0 }, { opacity: 1, duration: 0.35 })
@@ -33,6 +34,9 @@ function QuestModal({ q, num, onClose, onSolved }: { q: Quest; num: number; onCl
         )
         .fromTo(".qm-in", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, stagger: 0.06, ease: "power3.out" }, "-=0.35");
       root.current!.querySelector<HTMLInputElement>("input")?.focus({ preventScroll: true });
+      return () => {
+        if (previous instanceof HTMLElement && previous.isConnected) previous.focus({ preventScroll: true });
+      };
     },
     { scope: root },
   );
@@ -46,9 +50,24 @@ function QuestModal({ q, num, onClose, onSolved }: { q: Quest; num: number; onCl
   });
 
   useEffect(() => {
-    const h = (e: KeyboardEvent) => e.key === "Escape" && close();
+    const h = (e: KeyboardEvent) => {
+      if (e.key === "Escape") close();
+      if (e.key !== "Tab") return;
+      const controls = Array.from(root.current?.querySelectorAll<HTMLElement>("button:not(:disabled), input, [tabindex='0']") ?? []).filter((el) => el.getClientRects().length > 0);
+      const first = controls[0];
+      const last = controls[controls.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last?.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first?.focus();
+      }
+    };
     window.addEventListener("keydown", h);
-    return () => window.removeEventListener("keydown", h);
+    return () => {
+      window.removeEventListener("keydown", h);
+    };
   }, [close]);
 
   const check = contextSafe(() => {
@@ -73,10 +92,10 @@ function QuestModal({ q, num, onClose, onSolved }: { q: Quest; num: number; onCl
   return (
     <div ref={root} className="fixed inset-0 z-[70] flex items-center justify-center p-[3vw]" role="dialog" aria-modal aria-label={q.type}>
       <div className="qm-veil absolute inset-0 bg-[#06140f]/80 backdrop-blur-sm" onClick={close} />
-      <div className="qm-book relative grid max-h-[92vh] w-full max-w-[1280px] overflow-hidden rounded-[2rem] border-[4px] border-quill bg-parch text-quill shadow-[12px_12px_0_#06140f] lg:grid-cols-2">
+      <div data-lenis-prevent className="qm-book relative grid max-h-[90dvh] w-full max-w-[1280px] overflow-y-auto overscroll-contain rounded-[2rem] border-[4px] border-quill bg-parch text-quill shadow-[12px_12px_0_#06140f] lg:grid-cols-2">
         {/* left page: the quest */}
         <div data-lenis-prevent className="relative overflow-y-auto border-quill/20 p-[clamp(1.2rem,2.4vw,2.6rem)] lg:border-r-[3px] lg:border-dashed">
-          <div className="qm-in flex items-center gap-3">
+          <div className="qm-in flex items-center gap-3 pr-12">
             <span
               className="flex h-14 w-14 items-center justify-center rounded-2xl border-[3px] border-quill text-3xl shadow-tale-sm"
               style={{ background: q.color }}
@@ -171,7 +190,7 @@ function QuestModal({ q, num, onClose, onSolved }: { q: Quest; num: number; onCl
         </div>
 
         {/* right page: the solution scroll */}
-        <div className="relative flex min-h-[340px] flex-col bg-[#f6e8c8] p-[clamp(1.2rem,2.4vw,2.6rem)]">
+        <div className="relative flex h-[520px] max-h-[75dvh] min-h-[340px] flex-col bg-[#f6e8c8] p-[clamp(1.2rem,2.4vw,2.6rem)] lg:pt-16">
           <p className="qm-in mb-3 font-round text-sm font-black uppercase tracking-[0.2em] text-quill-soft">📜 Penyelesaian</p>
           {open ? (
             <div className="min-h-0 flex-1">
@@ -204,31 +223,48 @@ function QuestModal({ q, num, onClose, onSolved }: { q: Quest; num: number; onCl
 /* ─── the map ───────────────────────────────────────────── */
 export default function Quests({ onModal }: { onModal: (open: boolean) => void }) {
   const root = useRef<HTMLDivElement>(null);
+  const trail = useRef<SVGPathElement>(null);
   const [openIdx, setOpenIdx] = useState<number | null>(null);
   const [solved, setSolved] = useState<boolean[]>(() => quests.map(() => false));
   const stars = solved.filter(Boolean).length;
 
+  useEffect(() => {
+    const map = root.current;
+    if (!map) return;
+    const cards = Array.from(map.querySelectorAll<HTMLElement>(".qp-node"));
+    const update = () => {
+      // Layout coordinates stay stable during hover and entrance animations.
+      const centers = cards.map((card) => ({ x: card.offsetLeft + card.offsetWidth / 2, y: card.offsetTop + card.offsetHeight / 2 }));
+      if (centers.length !== 9 || !trail.current) return;
+      let d = `M ${centers[0].x} ${centers[0].y}`;
+      for (let i = 1; i < centers.length; i++) {
+        const prev = centers[i - 1];
+        const next = centers[i];
+        if (i % 3 === 0) {
+          const turn = i === 3 ? map.clientWidth - 12 : 12;
+          d += ` C ${turn} ${prev.y}, ${turn} ${next.y}, ${next.x} ${next.y}`;
+        } else d += ` L ${next.x} ${next.y}`;
+      }
+      trail.current.setAttribute("d", d);
+    };
+    const observer = new ResizeObserver(update);
+    observer.observe(map);
+    cards.forEach((card) => observer.observe(card));
+    update();
+    return () => observer.disconnect();
+  }, []);
+
   useGSAP(
     () => {
       gsap.fromTo(
-        ".qp-path",
-        { strokeDashoffset: 1 },
-        {
-          strokeDashoffset: 0,
-          ease: "none",
-          scrollTrigger: { trigger: root.current, start: "top 75%", end: "bottom 60%", scrub: 0.5 },
-        },
-      );
-      gsap.fromTo(
         ".qp-node",
-        { scale: 0, rotation: -20 },
+        { opacity: 0 },
         {
-          scale: 1,
-          rotation: 0,
+          opacity: 1,
           duration: 0.6,
           ease: "back.out(2.4)",
           stagger: 0.08,
-          clearProps: "transform,translate,rotate,scale",
+          clearProps: "opacity",
           scrollTrigger: { trigger: root.current, start: "top 70%", once: true },
         },
       );
@@ -253,7 +289,7 @@ export default function Quests({ onModal }: { onModal: (open: boolean) => void }
       <Pine className="pointer-events-none absolute bottom-0 right-[6%] w-10 opacity-15" fill="#22301e" />
       <div className="flex flex-wrap items-end justify-between gap-4">
         <ChapterTitle num="IV" kicker="Tipe soal SPLDV pada TKA" title={<>Peta Petualangan</>} />
-        <div className="rv mb-[3vh] flex items-center gap-2 rounded-2xl border-[3px] border-quill bg-white px-4 py-2 shadow-tale-sm">
+        <div className="rv mb-[3vh] flex max-w-full flex-wrap items-center gap-2 rounded-2xl border-[3px] border-quill bg-white px-4 py-2 shadow-tale-sm">
           <span className="font-round text-sm font-black text-quill-soft">Bintang</span>
           {quests.map((q, i) => (
             <Sparkle key={q.id} className="w-5 transition-all duration-500" fill={solved[i] ? "#f7c548" : "#e5dccb"} />
@@ -266,21 +302,18 @@ export default function Quests({ onModal }: { onModal: (open: boolean) => void }
       </p>
 
       <div ref={root} className="relative">
-        {/* winding dashed trail behind the 3×3 snake */}
+        {/* Measure the actual grid rather than stretching a fixed SVG path. */}
         <svg
-          viewBox="0 0 300 300"
-          preserveAspectRatio="none"
           className="pointer-events-none absolute inset-0 hidden h-full w-full lg:block"
           aria-hidden
         >
           <path
-            d="M50 50 H250 C290 50 290 150 250 150 H50 C10 150 10 250 50 250 H250"
+            ref={trail}
             fill="none"
             stroke="#d99a1e"
             vectorEffect="non-scaling-stroke"
-            strokeDasharray="1"
-            pathLength={1}
-            className="qp-path"
+            strokeLinecap="round"
+            strokeLinejoin="round"
             style={{ strokeWidth: 6 }}
           />
         </svg>
@@ -293,7 +326,7 @@ export default function Quests({ onModal }: { onModal: (open: boolean) => void }
               <button
                 key={q.id}
                 onClick={() => openQuest(i)}
-                className="qp-node group relative flex items-center gap-4 rounded-3xl border-[3px] border-quill bg-white p-4 text-left shadow-tale transition-all hover:-translate-y-1.5 hover:shadow-tale-lg lg:[grid-column:var(--c)] lg:[grid-row:var(--r)]"
+                className="qp-node group relative flex items-center gap-4 rounded-3xl border-[3px] border-quill bg-white p-4 text-left shadow-tale transition-[translate,box-shadow] hover:-translate-y-1.5 hover:shadow-tale-lg lg:[grid-column:var(--c)] lg:[grid-row:var(--r)]"
                 style={{ ["--c" as string]: col + 1, ["--r" as string]: row + 1 }}
               >
                 <span

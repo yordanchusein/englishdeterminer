@@ -51,7 +51,10 @@ export default function StepPlayer({ steps, vars, final, color = "#6a4bc4", size
         { backgroundColor: "rgba(247,197,72,0.55)", duration: 0.4, stagger: 0.1 },
         0.2,
       );
-      if (shown > 1) step.scrollIntoView({ block: "nearest", behavior: "smooth" });
+      if (shown > 1) {
+        const list = root.current!.querySelector("ol");
+        if (list) list.scrollTo({ top: (step as HTMLElement).offsetTop, behavior: "smooth" });
+      }
     },
     { scope: root, dependencies: [shown] },
   );
@@ -89,7 +92,7 @@ export default function StepPlayer({ steps, vars, final, color = "#6a4bc4", size
 
   return (
     <div ref={root} className="flex h-full min-h-0 flex-col">
-      <ol data-lenis-prevent className="min-h-0 flex-1 space-y-4 overflow-y-auto pr-2">
+      <ol data-lenis-prevent className="relative min-h-0 flex-1 space-y-4 overflow-y-auto overscroll-contain p-2 pb-4">
         {steps.slice(0, shown).map((s, i) => (
           <li key={i} data-step={i} className="relative pl-11">
             <span
@@ -138,7 +141,7 @@ export default function StepPlayer({ steps, vars, final, color = "#6a4bc4", size
         )}
       </ol>
 
-      <div className="mt-4 flex shrink-0 items-center gap-3">
+      <div className="mt-4 flex shrink-0 flex-wrap items-center gap-3">
         <button
           onClick={next}
           disabled={done}
