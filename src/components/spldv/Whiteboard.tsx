@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import PenSizePicker from "./PenSizePicker";
+import { whiteboardButton as button } from "./whiteboardStyles";
 import { useEffect, useRef, useState, type PointerEvent } from "react";
 
 type Point = { x: number; y: number };
@@ -14,7 +15,6 @@ const COLORS = [
   { name: "Hijau", value: "#087e76" },
   { name: "Biru", value: "#245bc2" },
 ];
-const button = "min-h-11 rounded-xl border-2 border-quill/25 bg-white px-4 py-2 font-bold transition-colors hover:bg-gold/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet disabled:opacity-40 disabled:cursor-not-allowed";
 
 function paint(canvas: HTMLCanvasElement, strokes: Stroke[]) {
   const ctx = canvas.getContext("2d");
@@ -116,11 +116,15 @@ export default function Whiteboard() {
           <Link href="/spldv" className={button}>Kembali ke materi</Link>
         </header>
         <p className="mb-4">Tulis persamaan, coret langkah, dan temukan nilai x serta y. Gunakan mouse, stylus, atau jari.</p>
-        <div aria-label="Alat papan tulis" className="mb-4 flex flex-wrap items-center gap-2 rounded-2xl border-2 border-quill/20 bg-parch-deep/60 p-3">
+        <div aria-label="Alat papan tulis" className="mb-4 flex flex-wrap items-center gap-3 rounded-2xl border-2 border-quill/20 bg-parch-deep/60 p-3">
           <button className={button} aria-pressed={!erase} onClick={() => setErase(false)}>Pena</button>
-          <button className={button} aria-pressed={erase} onClick={() => setErase(true)}>Penghapus{erase ? " aktif" : ""}</button>
-          <div className="flex gap-2" role="group" aria-label="Warna pena">
-            {COLORS.map((item) => <button key={item.value} aria-label={item.name} aria-pressed={color === item.value && !erase} onClick={() => { setColor(item.value); setErase(false); }} className="flex size-11 items-center justify-center rounded-full border-2 border-white text-xl text-white outline-offset-2 focus-visible:outline-2 focus-visible:outline-quill" style={{ background: item.value }}>{color === item.value && !erase ? "✓" : ""}</button>)}
+          <button className={button} aria-pressed={erase} onClick={() => setErase(true)}>Penghapus</button>
+          <div className="flex gap-3" role="group" aria-label="Warna pena">
+            {COLORS.map((item) => (
+              <button key={item.value} aria-label={item.name} title={item.name} aria-pressed={color === item.value && !erase} onClick={() => { setColor(item.value); setErase(false); }} className={`${button} w-12 shrink-0`}>
+                <span aria-hidden="true" className="flex size-5 shrink-0 items-center justify-center rounded-full text-sm text-white ring-2 ring-white/70" style={{ backgroundColor: item.value }}>{color === item.value && !erase ? "✓" : ""}</span>
+              </button>
+            ))}
           </div>
           <PenSizePicker value={width} color={color} onChange={setWidth} />
           <button className={button} disabled={cursor === 0} onClick={() => setCursor(cursor - 1)}>Undo</button>

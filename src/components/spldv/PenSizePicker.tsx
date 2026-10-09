@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
+import { whiteboardButton } from "./whiteboardStyles";
 
 const SIZES = [
   { value: 3, label: "Tipis" },
@@ -45,7 +46,7 @@ export default function PenSizePicker({ value, color, onChange }: { value: numbe
               setOpen(true);
             }
           }}
-          className={`flex min-h-12 min-w-44 items-center gap-3 rounded-xl border-2 bg-white px-3 py-2 font-bold shadow-tale-sm transition-colors hover:border-violet focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet ${open ? "border-violet" : "border-quill/30"}`}>
+          className={`${whiteboardButton} min-w-44`}>
           <span aria-hidden="true" className="flex w-5 items-center justify-center"><span className="rounded-full" style={{ width: value, height: value, backgroundColor: color }} /></span>
           <span id={`${id}-value`} className="flex-1 text-left">{selected.label} <span className="text-sm text-quill-soft">· {value} px</span></span>
           <svg aria-hidden="true" viewBox="0 0 20 20" fill="none" className={`size-4 text-quill-soft ${open ? "rotate-180" : ""}`}><path d="m5 7 5 5 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>

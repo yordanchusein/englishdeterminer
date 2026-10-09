@@ -1,0 +1,2 @@
+/** Shared treatment for whiteboard actions and the pen-size menu trigger. */
+export const whiteboardButton = "inline-flex min-h-12 items-center justify-center gap-3 rounded-xl border-2 border-quill/30 bg-white px-3 py-2 font-bold text-quill shadow-tale-sm transition-colors enabled:hover:border-violet focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet aria-pressed:border-violet aria-pressed:bg-violet aria-pressed:text-white aria-expanded:border-violet disabled:cursor-not-allowed disabled:opacity-40";
